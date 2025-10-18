@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:todo_app/core/theme/app_theme.dart';
 import 'package:todo_app/features/tasks/data/task_repository.dart';
 import 'package:todo_app/features/tasks/models/task.dart';
+import 'package:todo_app/l10n/l10n.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
   const TaskFormScreen({
@@ -113,14 +114,21 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = L10n.of(context);
+    
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.task == null ? 'New Task' : 'Edit Task'),
+        title: Text(widget.task == null ? l10n.addTask : l10n.editTask),
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => context.go('/'),
+          tooltip: l10n.cancel,
+        ),
         actions: [
           IconButton(
             onPressed: _save,
             icon: const Icon(Icons.check),
-            tooltip: 'Save task',
+            tooltip: l10n.save,
           ),
         ],
       ),
@@ -132,9 +140,9 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             TextFormField(
               controller: _titleController,
               decoration: InputDecoration(
-                labelText: 'Title',
+                labelText: l10n.taskTitle,
                 hintText: 'What needs to be done?',
-                prefixIcon: const Icon(Icons.task_alt),
+                prefixIcon: const Icon(Icons.check_circle_outlined),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -155,9 +163,9 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             TextFormField(
               controller: _noteController,
               decoration: InputDecoration(
-                labelText: 'Description',
+                labelText: l10n.taskDescription,
                 hintText: 'Add more details about this task...',
-                prefixIcon: const Icon(Icons.description),
+                prefixIcon: const Icon(Icons.description_outlined),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -167,7 +175,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             ),
             const SizedBox(height: 24),
             _buildDateTimeField(
-              title: 'Due Date',
+              title: l10n.taskDueDate,
               value: _dueDate,
               icon: Icons.event,
               color: _dueDate?.isBefore(DateTime.now()) ?? false
@@ -193,12 +201,13 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             TextFormField(
               initialValue: _project,
               decoration: InputDecoration(
-                labelText: 'Project',
-                hintText: 'Organize tasks by project (optional)',
-                prefixIcon: const Icon(Icons.folder),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                labelText: l10n.taskProject,
+                  hintText: 'Add task to a project',
+                  prefixIcon: const Icon(Icons.folder_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  helperText: 'Projects help you organize related tasks together',
               ),
               onChanged: (value) {
                 setState(() {
@@ -221,9 +230,9 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     
     String dateStr;
     if (dateOnly == DateTime(now.year, now.month, now.day)) {
-      dateStr = 'Today';
+      dateStr = L10n.of(context).today;
     } else if (dateOnly == tomorrow) {
-      dateStr = 'Tomorrow';
+      dateStr = L10n.of(context).tomorrow;
     } else {
       dateStr = '${dateTime.day.toString().padLeft(2, '0')}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.year}';
     }
@@ -241,7 +250,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Material(
@@ -261,16 +270,16 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey,
+                          color: Theme.of(context).textTheme.bodySmall?.color,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         value != null ? _formatDateTime(value) : 'Not set',
                         style: TextStyle(
-                          color: color ?? AppTheme.textColor,
+                          color: color ?? Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 16,
                         ),
                       ),
@@ -295,11 +304,11 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 4, bottom: 8),
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
-            'Priority',
-            style: TextStyle(
+            L10n.of(context).taskPriority,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
@@ -310,7 +319,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             Expanded(
               child: _buildPriorityOption(
                 value: 0,
-                label: 'None',
+                label: '-',
                 color: Colors.grey,
               ),
             ),
@@ -318,7 +327,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             Expanded(
               child: _buildPriorityOption(
                 value: 1,
-                label: 'Low',
+                label: L10n.of(context).lowPriority,
                 color: Colors.blue,
               ),
             ),
@@ -326,7 +335,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             Expanded(
               child: _buildPriorityOption(
                 value: 2,
-                label: 'Medium',
+                label: L10n.of(context).mediumPriority,
                 color: Colors.orange,
               ),
             ),
@@ -334,7 +343,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             Expanded(
               child: _buildPriorityOption(
                 value: 3,
-                label: 'High',
+                label: L10n.of(context).highPriority,
                 color: Colors.red,
               ),
             ),
@@ -363,7 +372,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isSelected ? color : Colors.grey,
+              color: isSelected ? color : Theme.of(context).dividerColor,
               width: isSelected ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(8),
@@ -372,13 +381,13 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             children: [
               Icon(
                 Icons.flag,
-                color: isSelected ? color : Colors.grey,
+                color: isSelected ? color : Theme.of(context).iconTheme.color,
               ),
               const SizedBox(height: 4),
               Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? color : Colors.grey,
+                  color: isSelected ? color : Theme.of(context).textTheme.bodyMedium?.color,
                   fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
                 ),
               ),
