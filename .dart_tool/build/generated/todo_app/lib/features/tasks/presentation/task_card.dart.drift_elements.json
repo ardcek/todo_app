@@ -1,1 +1,0 @@
-{"valid_import":true,"imports":[{"uri":"package:flutter/material.dart","transitive":false},{"uri":"package:todo_app/features/tasks/models/task.dart","transitive":false},{"uri":"package:todo_app/core/theme/app_theme.dart","transitive":false},{"uri":"package:todo_app/l10n/l10n.dart","transitive":false}],"elements":[]}

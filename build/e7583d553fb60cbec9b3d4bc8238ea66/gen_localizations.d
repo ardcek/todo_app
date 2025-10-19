@@ -1,1 +1,0 @@
- C:\\Users\\Arda\\Desktop\\to-do-app\\lib/l10n\\app_localizations_en.dart C:\\Users\\Arda\\Desktop\\to-do-app\\lib/l10n\\app_localizations_tr.dart C:\\Users\\Arda\\Desktop\\to-do-app\\lib/l10n\\app_localizations.dart:  C:\\Users\\Arda\\Desktop\\to-do-app\\l10n.yaml C:\\Users\\Arda\\Desktop\\to-do-app\\lib/l10n\\app_en.arb C:\\Users\\Arda\\Desktop\\to-do-app\\lib/l10n\\app_tr.arb
