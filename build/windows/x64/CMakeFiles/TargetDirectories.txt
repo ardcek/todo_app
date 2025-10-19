@@ -1,0 +1,14 @@
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/CMakeFiles/INSTALL.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/CMakeFiles/ALL_BUILD.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/CMakeFiles/ZERO_CHECK.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/flutter/CMakeFiles/flutter_wrapper_plugin.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/flutter/CMakeFiles/flutter_wrapper_app.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/flutter/CMakeFiles/flutter_assemble.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/flutter/CMakeFiles/INSTALL.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/runner/CMakeFiles/todo_app.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/runner/CMakeFiles/INSTALL.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/runner/CMakeFiles/ALL_BUILD.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/plugins/sqlite3_flutter_libs/CMakeFiles/sqlite3_flutter_libs_plugin.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/plugins/sqlite3_flutter_libs/CMakeFiles/sqlite3.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/plugins/sqlite3_flutter_libs/CMakeFiles/INSTALL.dir
+C:/Users/Arda/Desktop/to-do-app/build/windows/x64/plugins/sqlite3_flutter_libs/CMakeFiles/ALL_BUILD.dir

@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/sqlite3-populate"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/055a489a6fe65bc4b1e6471951b28452/sqlite3-populate.rule"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/a58f1752a4d81d99448d28aa60d6a2cd/sqlite3-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/51cc905fc9613ce309b8b4a0cb6ff823/sqlite3-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/51cc905fc9613ce309b8b4a0cb6ff823/sqlite3-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/51cc905fc9613ce309b8b4a0cb6ff823/sqlite3-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/51cc905fc9613ce309b8b4a0cb6ff823/sqlite3-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/51cc905fc9613ce309b8b4a0cb6ff823/sqlite3-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/51cc905fc9613ce309b8b4a0cb6ff823/sqlite3-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/51cc905fc9613ce309b8b4a0cb6ff823/sqlite3-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/Arda/Desktop/to-do-app/build/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/51cc905fc9613ce309b8b4a0cb6ff823/sqlite3-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"sqlite3-populate"
+		],
+		"name" : "sqlite3-populate"
+	}
+}

@@ -3,11 +3,22 @@
   "tasks": "Görevler",
   "addTask": "Görev Ekle",
   "editTask": "Görevi Düzenle",
-  "taskTitle": "Başlık",
+  "taskTitle": "Ne yapılması gerekiyor?",
   "taskDescription": "Açıklama",
   "taskDueDate": "Bitiş Tarihi",
   "taskPriority": "Öncelik",
   "taskProject": "Proje",
+  "notSet": "Ayarlanmadı",
+  "reminder": "Hatırlatıcı",
+  "clearField": "{field}'i temizle",
+  "@clearField": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "projectHelperText": "Projeler ilgili görevleri bir arada organize etmenize yardımcı olur",
   "save": "Kaydet",
   "cancel": "İptal",
   "delete": "Sil",

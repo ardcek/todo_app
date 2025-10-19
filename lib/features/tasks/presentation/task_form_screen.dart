@@ -83,32 +83,48 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final repository = ref.read(taskRepositoryProvider);
-
     try {
+      final repository = ref.read(taskRepositoryProvider);
+      
       if (widget.task == null) {
-        await repository.createTask(_titleController.text);
-      } else {
-        final updatedTask = widget.task!.copyWith(
+        await repository.createTask(
           title: _titleController.text,
-          note: _noteController.text,
+          note: _noteController.text.isNotEmpty ? _noteController.text : null,
           dueDate: _dueDate,
           reminderDate: _reminderDate,
           priority: _priority,
-          project: _project,
+          project: _project?.isNotEmpty == true ? _project : null,
         );
-        await repository.updateTask(updatedTask);
+      } else {
+        await repository.updateTask(widget.task!.copyWith(
+          title: _titleController.text,
+          note: _noteController.text.isNotEmpty ? _noteController.text : null,
+          dueDate: _dueDate,
+          reminderDate: _reminderDate,
+          priority: _priority,
+          project: _project?.isNotEmpty == true ? _project : null,
+        ));
       }
 
-      if (mounted) {
-        if (context.mounted) {
-          context.go('/');
-        }
+      if (mounted && context.mounted) {
+        context.go('/');
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+    } catch (e, stackTrace) {
+      debugPrint('Error saving task: $e\n$stackTrace');
+      if (mounted && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Görev kaydedilirken bir hata oluştu: ${e.toString()}'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'Tekrar Dene',
+              textColor: Theme.of(context).colorScheme.onError,
+              onPressed: _save,
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -141,7 +157,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
               controller: _titleController,
               decoration: InputDecoration(
                 labelText: l10n.taskTitle,
-                hintText: 'What needs to be done?',
+                hintText: l10n.taskTitle,
                 prefixIcon: const Icon(Icons.check_circle_outlined),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -149,10 +165,10 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter a title';
+                  return 'Lütfen bir başlık girin';
                 }
                 if (value.length < 3) {
-                  return 'Title must be at least 3 characters';
+                  return 'Başlık en az 3 karakter olmalı';
                 }
                 return null;
               },
@@ -164,7 +180,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
               controller: _noteController,
               decoration: InputDecoration(
                 labelText: l10n.taskDescription,
-                hintText: 'Add more details about this task...',
+                hintText: 'Bu görev hakkında daha fazla detay ekleyin...',
                 prefixIcon: const Icon(Icons.description_outlined),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -186,7 +202,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             ),
             const SizedBox(height: 16),
             _buildDateTimeField(
-              title: 'Reminder',
+              title: l10n.reminder,
               value: _reminderDate,
               icon: Icons.notifications,
               color: _reminderDate?.isBefore(DateTime.now()) ?? false
@@ -202,12 +218,12 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
               initialValue: _project,
               decoration: InputDecoration(
                 labelText: l10n.taskProject,
-                  hintText: 'Add task to a project',
+                  hintText: 'Görevi bir projeye ekle',
                   prefixIcon: const Icon(Icons.folder_outlined),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  helperText: 'Projects help you organize related tasks together',
+                  helperText: l10n.projectHelperText,
               ),
               onChanged: (value) {
                 setState(() {
@@ -237,7 +253,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
       dateStr = '${dateTime.day.toString().padLeft(2, '0')}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.year}';
     }
     
-    return '$dateStr at ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    return '$dateStr saat ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   Widget _buildDateTimeField({
@@ -248,9 +264,10 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     required VoidCallback onClear,
     Color? color,
   }) {
+    final l10n = L10n.of(context);
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).dividerColor),
+        border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Material(
@@ -272,14 +289,14 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                         title,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Theme.of(context).textTheme.bodySmall?.color,
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        value != null ? _formatDateTime(value) : 'Not set',
+                        value != null ? _formatDateTime(value) : l10n.notSet,
                         style: TextStyle(
-                          color: color ?? Theme.of(context).textTheme.bodyLarge?.color,
+                          color: color ?? Theme.of(context).colorScheme.onSurface,
                           fontSize: 16,
                         ),
                       ),
@@ -290,7 +307,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                   IconButton(
                     icon: const Icon(Icons.clear),
                     onPressed: onClear,
-                    tooltip: 'Clear $title',
+                    tooltip: l10n.clearField(title),
                   ),
               ],
             ),
@@ -372,7 +389,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isSelected ? color : Theme.of(context).dividerColor,
+              color: isSelected ? color : Colors.grey,
               width: isSelected ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(8),
@@ -381,13 +398,13 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             children: [
               Icon(
                 Icons.flag,
-                color: isSelected ? color : Theme.of(context).iconTheme.color,
+                color: isSelected ? color : Colors.grey,
               ),
               const SizedBox(height: 4),
               Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? color : Theme.of(context).textTheme.bodyMedium?.color,
+                  color: isSelected ? color : Colors.grey,
                   fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
                 ),
               ),

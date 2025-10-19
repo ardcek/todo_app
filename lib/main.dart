@@ -1,35 +1,138 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/core/config/app_config.dart';
 import 'package:todo_app/core/router/router.dart';
 import 'package:todo_app/core/theme/app_theme.dart';
+import 'package:todo_app/core/theme/theme_controller.dart';
+import 'package:todo_app/core/config/locale_controller.dart';
+import 'package:todo_app/l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:todo_app/features/tasks/data/notification_service.dart';
+import 'package:todo_app/core/database/database.dart';
+import 'dart:async';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    
+    // Optimize animations
+    WidgetsBinding.instance.renderView.automaticSystemUiAdjustment = false;
+    await Future.delayed(const Duration(milliseconds: 100));
 
-  final container = ProviderContainer();
+    final container = ProviderContainer();
+  
+    // Initialize database
+    unawaited(AppDatabase.getInstance());
+    
+    // Initialize services
+    await container.read(notificationServiceProvider).initialize();
+    await container.read(localeControllerProvider.notifier).loadSavedLocale();
 
-  runApp(
-    UncontrolledProviderScope(
-      container: container,
-      child: const MyApp(),
-    ),
-  );
-}
-
-class MyApp extends ConsumerWidget {
+    runApp(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MyApp(),
+      ),
+    );
+  } catch (e, stack) {
+    rethrow;
+  }}class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(routerProvider);
-    final config = ref.watch(appConfigProvider);
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
 
-    return MaterialApp.router(
+class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
+  Timer? _keepAliveTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _startKeepAlive();
+  }
+
+  @override
+  void dispose() {
+    _keepAliveTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  void _startKeepAlive() {
+    // Keep the app alive by periodically checking the database connection
+    _keepAliveTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      AppDatabase.getInstance();
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      // Save any necessary state or perform cleanup
+    } else if (state == AppLifecycleState.resumed) {
+      // Reinitialize any necessary resources
+      AppDatabase.getInstance();
+    }
+  }
+
+  late final config = ref.read(appConfigProvider);
+
+  @override
+  Widget build(BuildContext context) {
+    try {
+      final locale = ref.watch(localeControllerProvider);
+
+      return MaterialApp.router(
       title: 'Todo App',
       debugShowCheckedModeBanner: !config.isProduction,
       theme: AppTheme.lightTheme,
-      routerConfig: router,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ref.watch(themeControllerProvider) ? ThemeMode.dark : ThemeMode.light,
+      routerConfig: appRouter,
+      builder: (context, child) {
+        return ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: child!,
+        );
+      },
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('tr'),
+      ],
+      locale: Locale(locale),
     );
+    } catch (e) {
+      return MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 48,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Error: $e',
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

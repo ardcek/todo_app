@@ -1,0 +1,12 @@
+{
+  "elements": {},
+  "imports": [
+    "package:flutter/material.dart",
+    "package:flutter_riverpod/flutter_riverpod.dart",
+    "package:go_router/go_router.dart",
+    "package:todo_app/core/theme/app_theme.dart",
+    "package:todo_app/features/tasks/data/task_repository.dart",
+    "package:todo_app/features/tasks/models/task.dart",
+    "package:todo_app/l10n/l10n.dart"
+  ]
+}

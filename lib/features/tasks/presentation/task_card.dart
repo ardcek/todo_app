@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/features/tasks/models/task.dart';
 import 'package:todo_app/core/theme/app_theme.dart';
+import 'package:todo_app/l10n/l10n.dart';
 
 class TaskCard extends StatefulWidget {
   final Task task;
@@ -99,8 +100,8 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
                                     ? TextDecoration.lineThrough
                                     : null,
                                 color: widget.task.completed
-                                    ? AppTheme.subtextColor
-                                    : AppTheme.textColor,
+                                    ? Theme.of(context).colorScheme.onSurface.withOpacity(0.5)
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                             if (widget.task.note?.isNotEmpty ?? false) ...[
@@ -109,8 +110,8 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
                                 widget.task.note!,
                                 style: TextStyle(
                                   color: widget.task.completed
-                                      ? AppTheme.subtextColor
-                                      : null,
+                                      ? Theme.of(context).colorScheme.onSurface.withOpacity(0.5)
+                                      : Theme.of(context).colorScheme.onSurface,
                                   decoration: widget.task.completed
                                       ? TextDecoration.lineThrough
                                       : null,
@@ -150,10 +151,10 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
                       Row(
                         children: <Widget>[
                           if (widget.task.reminderDate != null) ...[
-                            const Icon(
+                            Icon(
                               Icons.notifications,
                               size: 16,
-                              color: AppTheme.subtextColor,
+                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                             ),
                             const SizedBox(width: 8),
                           ],
@@ -201,8 +202,13 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
         Icon(Icons.flag, size: 16, color: color),
         const SizedBox(width: 4),
         Text(
-          'P$priority',
-          style: TextStyle(color: color, fontWeight: FontWeight.w500),
+          priority == 3 ? L10n.of(context).highPriority[0] :
+          priority == 2 ? L10n.of(context).mediumPriority[0] :
+          priority == 1 ? L10n.of(context).lowPriority[0] : '-',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
@@ -214,9 +220,9 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
     final dateOnly = DateTime(date.year, date.month, date.day);
 
     if (dateOnly == DateTime(now.year, now.month, now.day)) {
-      return 'Today';
+      return L10n.of(context).today;
     } else if (dateOnly == tomorrow) {
-      return 'Tomorrow';
+      return L10n.of(context).tomorrow;
     } else {
       return '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}';
     }
@@ -238,10 +244,10 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
   Color _getDueDateColor(DateTime dueDate) {
     final now = DateTime.now();
     if (dueDate.isBefore(now)) {
-      return Colors.red;
+      return Theme.of(context).colorScheme.error;
     } else if (dueDate.difference(now).inDays <= 1) {
-      return Colors.orange;
+      return Theme.of(context).colorScheme.tertiary;
     }
-    return AppTheme.subtextColor;
+    return Theme.of(context).colorScheme.onSurface.withOpacity(0.6);
   }
 }

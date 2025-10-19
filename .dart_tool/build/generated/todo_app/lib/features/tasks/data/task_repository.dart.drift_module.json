@@ -1,0 +1,11 @@
+{
+  "elements": {},
+  "imports": [
+    "package:drift/drift.dart",
+    "package:flutter/foundation.dart",
+    "package:riverpod_annotation/riverpod_annotation.dart",
+    "package:todo_app/core/database/database.dart",
+    "package:todo_app/features/tasks/data/notification_service.dart",
+    "package:todo_app/features/tasks/models/task.dart"
+  ]
+}

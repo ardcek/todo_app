@@ -3,11 +3,22 @@
   "tasks": "Tasks",
   "addTask": "Add Task",
   "editTask": "Edit Task",
-  "taskTitle": "Title",
+  "taskTitle": "What needs to be done?",
   "taskDescription": "Description",
   "taskDueDate": "Due Date",
   "taskPriority": "Priority",
   "taskProject": "Project",
+  "notSet": "Not set",
+  "reminder": "Reminder",
+  "clearField": "Clear {field}",
+  "@clearField": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "projectHelperText": "Projects help you organize related tasks together",
   "save": "Save",
   "cancel": "Cancel",
   "delete": "Delete",

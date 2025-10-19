@@ -6,11 +6,11 @@ part of 'task_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$taskRepositoryHash() => r'626abcc874c65bb125775419cd05ef865481629e';
+String _$taskRepositoryHash() => r'752d7ab316462a3aacedf1637227eb4ca617f0d7';
 
 /// See also [taskRepository].
 @ProviderFor(taskRepository)
-final taskRepositoryProvider = AutoDisposeProvider<TaskRepository>.internal(
+final taskRepositoryProvider = Provider<TaskRepository>.internal(
   taskRepository,
   name: r'taskRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,12 +22,12 @@ final taskRepositoryProvider = AutoDisposeProvider<TaskRepository>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef TaskRepositoryRef = AutoDisposeProviderRef<TaskRepository>;
-String _$appDatabaseHash() => r'68c9ad772c198d1a34d2dcccc0a6a35f43092fd5';
+typedef TaskRepositoryRef = ProviderRef<TaskRepository>;
+String _$appDatabaseHash() => r'1ebf58f6ade29eee72ed1f4977dd6fa79307a295';
 
 /// See also [appDatabase].
 @ProviderFor(appDatabase)
-final appDatabaseProvider = AutoDisposeProvider<AppDatabase>.internal(
+final appDatabaseProvider = AutoDisposeFutureProvider<AppDatabase>.internal(
   appDatabase,
   name: r'appDatabaseProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -39,6 +39,6 @@ final appDatabaseProvider = AutoDisposeProvider<AppDatabase>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef AppDatabaseRef = AutoDisposeProviderRef<AppDatabase>;
+typedef AppDatabaseRef = AutoDisposeFutureProviderRef<AppDatabase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

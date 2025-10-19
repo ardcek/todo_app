@@ -8,9 +8,9 @@ class AppTheme {
   static const Color textColor = Color(0xFF333333);
   static const Color subtextColor = Color(0xFF666666);
 
-  static ThemeData lightTheme = ThemeData(
+  static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: primaryColor,
       secondary: secondaryColor,
       error: errorColor,
@@ -26,12 +26,12 @@ class AppTheme {
       backgroundColor: secondaryColor,
       foregroundColor: Colors.white,
     ),
-    cardTheme: CardThemeData(
+    cardTheme: const CardThemeData(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     ),
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: textColor),
@@ -82,5 +82,87 @@ class AppTheme {
     ),
   );
 
-  // You can add darkTheme here if needed
+  static ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    colorScheme: const ColorScheme.dark(
+      primary: primaryColor,
+      secondary: secondaryColor,
+      error: errorColor,
+      onBackground: Colors.white,
+      onSurface: Colors.white,
+      background: Color(0xFF121212),
+      surface: Color(0xFF1E1E1E),
+    ),
+    scaffoldBackgroundColor: const Color(0xFF121212),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xFF1E1E1E),
+      foregroundColor: Colors.white,
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+      ),
+      elevation: 0,
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: secondaryColor,
+      foregroundColor: Colors.white,
+    ),
+    cardTheme: const CardThemeData(
+      color: Color(0xFF1E1E1E),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    ),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(color: Colors.white),
+      displayMedium: TextStyle(color: Colors.white),
+      displaySmall: TextStyle(color: Colors.white),
+      headlineMedium: TextStyle(color: Colors.white),
+      headlineSmall: TextStyle(color: Colors.white),
+      titleLarge: TextStyle(color: Colors.white),
+      titleMedium: TextStyle(color: Colors.white),
+      titleSmall: TextStyle(color: Colors.white),
+      bodyLarge: TextStyle(color: Colors.white),
+      bodyMedium: TextStyle(color: Colors.white),
+      bodySmall: TextStyle(color: Colors.white70),
+      labelLarge: TextStyle(color: Colors.white),
+      labelMedium: TextStyle(color: Colors.white),
+      labelSmall: TextStyle(color: Colors.white70),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: const Color(0xFF2C2C2C),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: primaryColor),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: errorColor),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      ),
+    ),
+  );
 }

@@ -1,0 +1,11 @@
+{
+  "elements": {},
+  "imports": [
+    "package:flutter/foundation.dart",
+    "package:flutter/widgets.dart",
+    "package:flutter_localizations/flutter_localizations.dart",
+    "package:intl/intl.dart",
+    "package:todo_app/l10n/app_localizations_en.dart",
+    "package:todo_app/l10n/app_localizations_tr.dart"
+  ]
+}

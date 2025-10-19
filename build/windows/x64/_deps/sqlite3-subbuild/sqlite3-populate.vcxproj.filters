@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\51cc905fc9613ce309b8b4a0cb6ff823\sqlite3-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\51cc905fc9613ce309b8b4a0cb6ff823\sqlite3-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\51cc905fc9613ce309b8b4a0cb6ff823\sqlite3-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\51cc905fc9613ce309b8b4a0cb6ff823\sqlite3-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\51cc905fc9613ce309b8b4a0cb6ff823\sqlite3-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\51cc905fc9613ce309b8b4a0cb6ff823\sqlite3-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\51cc905fc9613ce309b8b4a0cb6ff823\sqlite3-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\51cc905fc9613ce309b8b4a0cb6ff823\sqlite3-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\a58f1752a4d81d99448d28aa60d6a2cd\sqlite3-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\055a489a6fe65bc4b1e6471951b28452\sqlite3-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Arda\Desktop\to-do-app\build\windows\x64\_deps\sqlite3-subbuild\CMakeFiles\sqlite3-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{6D8FA8E7-EDE1-39BC-BFE8-4C00DE2567DE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

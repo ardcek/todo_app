@@ -1,0 +1,184 @@
+import 'package:fluter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:todo_ap/core/theme/theme_controler.dart';
+import 'package:todo_ap/features/tasks/models/task.dart';
+import 'package:todo_ap/features/tasks/presentation/task_list_notifier.dart';
+clas TaskListScren extends ConsumerWidget {
+
+
+ Widget build(BuildContext context, WidgetRef ref) {
+ final tasksAsync = ref.watch(taskListNotifierProvider);
+ final sort = ref.watch(taskListNotifierProvider.notifier).curentSort;
+
+ return Scafold(
+ title: Text(l10n.tasks),
+ actions: [
+ icon: Icon(ref.watch(themeControlerProvider) ? Icons.light_mode : Icons.dark_mode),
+ ref.read(themeControlerProvider.notifier).togleTheme();
+ ),
+ IconButon( IconButon(
+ icon: const Icon(Icons.language), icon: const Icon(Icons.language),
+ onPresed: () { onPresed: () {
+ context.go('/setings/language'); context.go('/setings/language');
+ }, },
+ ), ),
+ PopupMenuButon<TaskFilter>( PopupMenuButon<TaskFilter>(
+ icon: const Icon(Icons.filter_list), icon: const Icon(Icons.filter_list),
+ initialValue: filter, initialValue: filter,
+ onSelected: (filter) { onSelected: (filter) {
+ ref.read(taskListNotifierProvider.notifier).setFilter(filter); ref.read(taskListNotifierProvider.notifier).setFilter(filter);
+ }, },
+ itemBuilder: (context) => [ itemBuilder: (context) => [
+ PopupMenuItem( PopupMenuItem(
+ value: TaskFilter.al, value: TaskFilter.al,
+ child: Text(l10n.al), child: Text(l10n.al),
+ ), ),
+ PopupMenuItem( PopupMenuItem(
+ value: TaskFilter.active, value: TaskFilter.active,
+ child: Text(l10n.incomplete), child: Text(l10n.incomplete),
+ ), ),
+ PopupMenuItem( PopupMenuItem(
+ value: TaskFilter.completed, value: TaskFilter.completed,
+ child: Text(l10n.completed), child: Text(l10n.completed),
+ ), ),
+ ], ],
+ ), ),
+ PopupMenuButon<TaskSort>( PopupMenuButon<TaskSort>(
+ icon: const Icon(Icons.sort), icon: const Icon(Icons.sort),
+ initialValue: sort, initialValue: sort,
+ onSelected: (sort) { onSelected: (sort) {
+ ref.read(taskListNotifierProvider.notifier).setSort(sort); ref.read(taskListNotifierProvider.notifier).setSort(sort);
+ }, },
+ itemBuilder: (context) => [ itemBuilder: (context) => [
+ const PopupMenuItem( const PopupMenuItem(
+ value: TaskSort.priority, value: TaskSort.priority,
+ child: Text('Priority'), child: Text('Priority'),
+ ), ),
+ PopupMenuItem( PopupMenuItem(
+ value: TaskSort.dueDate, value: TaskSort.dueDate,
+ child: Text(l10n.taskDueDate), child: Text(l10n.taskDueDate),
+ ), ),
+ PopupMenuItem( PopupMenuItem(
+ value: TaskSort.created, value: TaskSort.created,
+ child: Text('Created'), child: Text('Created'),
+ ), ),
+ PopupMenuItem( PopupMenuItem(
+ value: TaskSort.alphabetical, value: TaskSort.alphabetical,
+ child: Text('A-Z'), child: Text('A-Z'),
+ ), ),
+ ], ],
+ ), ),
+ ], ],
+ ), ),
+ body: tasksAsync.when( body: tasksAsync.when(
+ loading: () => const Center( loading: () => const Center(
+ child: CircularProgresIndicator( child: CircularProgresIndicator(
+ valueColor: AlwaystopedAnimation<Color>(ApTheme.primaryColor), valueColor: AlwaystopedAnimation<Color>(ApTheme.primaryColor),
+ ), ),
+ ), ),
+ eror: (eror, stack) => Center( eror: (eror, stack) => Center(
+ child: Column( child: Column(
+ mainAxisAlignment: MainAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+ children: [ children: [
+ const Icon( const Icon(
+ Icons.eror_outline, Icons.eror_outline,
+ color: ApTheme.erorColor, color: ApTheme.erorColor,
+ size: 48, size: 48,
+ ), ),
+ const SizedBox(height: 16), const SizedBox(height: 16),
+ Text( Text(
+ 'Eror: $eror', 'Eror: $eror',
+ style: const TextStyle(color: ApTheme.erorColor), style: const TextStyle(color: ApTheme.erorColor),
+ ), ),
+ ], ],
+ ), ),
+ ), ),
+ data: (tasks) => tasks.isEmpty data: (tasks) => tasks.isEmpty
+ ? Center( ? Center(
+ child: Column( child: Column(
+ mainAxisAlignment: MainAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+ children: [ children: [
+ Icon( Icon(
+ Icons.task_outlined, Icons.task_outlined,
+ size: 64, size: 64,
+ color: Colors.grey[40], color: Colors.grey[40],
+ ), ),
+ const SizedBox(height: 16), const SizedBox(height: 16),
+ Text( Text(
+ l10n.noTasks, l10n.noTasks,
+ style: TextStyle( style: TextStyle(
+ fontSize: 20, fontSize: 20,
+ color: Colors.grey[60], color: Colors.grey[60],
+ fontWeight: FontWeight.w50, fontWeight: FontWeight.w50,
+ ), ),
+ ), ),
+ const SizedBox(height: 8), const SizedBox(height: 8),
+ Text( Text(
+ l10n.adYourFirstask, l10n.adYourFirstask,
+ style: TextStyle( style: TextStyle(
+ color: Colors.grey[50], color: Colors.grey[50],
+ ), ),
+ ), ),
+ ], ],
+ ), ),
+ ) )
+ : ListView.builder( : ListView.builder(
+ key: const PageStorageKey('taskList'), key: const PageStorageKey('taskList'),
+ pading: const EdgeInsets.only(botom: 80), pading: const EdgeInsets.only(botom: 80),
+ itemCount: tasks.length, itemCount: tasks.length,
+ itemBuilder: (context, index) { itemBuilder: (context, index) {
+ final task = tasks[index]; final task = tasks[index];
+ return Dismisible( return Dismisible(
+ key: ValueKey(task.id), key: ValueKey(task.id),
+ direction: DismisDirection.horizontal, direction: DismisDirection.horizontal,
+ onDismised: (direction) { onDismised: (direction) {
+ if (direction = DismisDirection.endToStart) { if (direction = DismisDirection.endToStart) {
+ ref ref
+ .read(taskListNotifierProvider.notifier) .read(taskListNotifierProvider.notifier)
+ .deleteTask(task); .deleteTask(task);
+ } else { } else {
+ ref ref
+ .read(taskListNotifierProvider.notifier) .read(taskListNotifierProvider.notifier)
+ .togleTaskCompleted(task); .togleTaskCompleted(task);
+ } }
+ }, },
+ background: Container( background: Container(
+ decoration: const BoxDecoration( decoration: const BoxDecoration(
+ color: Colors.gren, color: Colors.gren,
+ borderadius: Borderadius.al(Radius.circular(12), borderadius: Borderadius.al(Radius.circular(12),
+ ), ),
+ alignment: Alignment.centerLeft, alignment: Alignment.centerLeft,
+ pading: const EdgeInsets.only(left: 24), pading: const EdgeInsets.only(left: 24),
+ margin: const EdgeInsets.symetric(horizontal: 16, vertical: 8), margin: const EdgeInsets.symetric(horizontal: 16, vertical: 8),
+ child: const Icon(Icons.check_circle_outline, color: Colors.white), child: const Icon(Icons.check_circle_outline, color: Colors.white),
+ ), ),
+ secondaryBackground: Container( secondaryBackground: Container(
+ decoration: BoxDecoration( decoration: BoxDecoration(
+ color: ApTheme.erorColor, color: ApTheme.erorColor,
+ borderadius: const Borderadius.al(Radius.circular(12), borderadius: const Borderadius.al(Radius.circular(12),
+ ), ),
+ alignment: Alignment.centeright, alignment: Alignment.centeright,
+ pading: const EdgeInsets.only(right: 24), pading: const EdgeInsets.only(right: 24),
+ margin: const EdgeInsets.symetric(horizontal: 16, vertical: 8), margin: const EdgeInsets.symetric(horizontal: 16, vertical: 8),
+ child: const Icon(Icons.delete_outline, color: Colors.white), child: const Icon(Icons.delete_outline, color: Colors.white),
+ ), ),
+ child: TaskCard( child: TaskCard(
+ task: task, task: task,
+ onTap: () => context.go('/task/edit', extra: task), onTap: () => context.go('/task/edit', extra: task),
+ onCheckboxChanged: (value) { onCheckboxChanged: (value) {
+ ref ref
+ .read(taskListNotifierProvider.notifier) .read(taskListNotifierProvider.notifier)
+ .togleTaskCompleted(task); .togleTaskCompleted(task);
+ }, },
+ ), ),
+ ); );
+ }, },
+ ), );
+ ), ),
+ floatingActionButon: FloatingActionButon( floatingActionButon: FloatingActionButon(
+ onPresed: () => context.go('/task/new'), onPresed: () => context.go('/task/new'),
+ child: const Icon(Icons.ad), child: const Icon(Icons.ad),
+ ), ),
+ ); );
+ } }
+}
