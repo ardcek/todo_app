@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:todo_app/core/theme/app_theme.dart';
 import 'package:todo_app/core/theme/theme_controller.dart';
 import 'package:todo_app/l10n/l10n.dart';
 import 'package:todo_app/features/tasks/models/task.dart';
@@ -21,8 +20,23 @@ class TaskListScreen extends ConsumerWidget {
       final sort = ref.watch(taskListNotifierProvider.notifier).currentSort;
 
       return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          title: Text(l10n.tasks),
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            l10n.tasks,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(1),
+            child: Divider(height: 1, thickness: 1),
+          ),
           actions: [
             IconButton(
               icon: Icon(
@@ -90,24 +104,28 @@ class TaskListScreen extends ConsumerWidget {
           builder: (context) {
             try {
               return tasksAsync.when(
-                loading: () => const Center(
+                loading: () => Center(
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
                 error: (error, stack) => Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.error_outline,
-                        color: AppTheme.errorColor,
+                        color: Theme.of(context).colorScheme.error,
                         size: 48,
                       ),
                       const SizedBox(height: 16),
                       Text(
                         'Error: $error',
-                        style: const TextStyle(color: AppTheme.errorColor),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                       ),
                     ],
                   ),
@@ -117,25 +135,35 @@ class TaskListScreen extends ConsumerWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.task_outlined,
-                              size: 64,
-                              color: Colors.grey[400],
+                            Container(
+                              padding: const EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                              ),
+                              child: Icon(
+                                Icons.task_outlined,
+                                size: 64,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 24),
                             Text(
                               l10n.noTasks,
                               style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.grey[600],
-                                fontWeight: FontWeight.w500,
+                                fontSize: 24,
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.2,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 12),
                             Text(
                               l10n.addYourFirstTask,
                               style: TextStyle(
-                                color: Colors.grey[500],
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                height: 1.4,
                               ),
                             ),
                           ],
@@ -162,9 +190,16 @@ class TaskListScreen extends ConsumerWidget {
                               }
                             },
                             background: Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Theme.of(context).colorScheme.primary,
+                                    Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                borderRadius: const BorderRadius.all(Radius.circular(12)),
                               ),
                               alignment: Alignment.centerLeft,
                               padding: const EdgeInsets.only(left: 24),
@@ -172,9 +207,16 @@ class TaskListScreen extends ConsumerWidget {
                               child: const Icon(Icons.check_circle_outline, color: Colors.white),
                             ),
                             secondaryBackground: Container(
-                              decoration: const BoxDecoration(
-                                color: AppTheme.errorColor,
-                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Theme.of(context).colorScheme.error,
+                                    Theme.of(context).colorScheme.error.withOpacity(0.8),
+                                  ],
+                                  begin: Alignment.centerRight,
+                                  end: Alignment.centerLeft,
+                                ),
+                                borderRadius: const BorderRadius.all(Radius.circular(12)),
                               ),
                               alignment: Alignment.centerRight,
                               padding: const EdgeInsets.only(right: 24),
@@ -218,9 +260,38 @@ class TaskListScreen extends ConsumerWidget {
             }
           },
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => context.go('/task/new'),
-          child: const Icon(Icons.add),
+        floatingActionButton: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: FloatingActionButton.extended(
+            onPressed: () => context.go('/task/new'),
+            icon: const Icon(Icons.add),
+            label: Text(
+              l10n.addTask,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
         ),
       );
     } catch (e, stack) {

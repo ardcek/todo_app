@@ -134,7 +134,27 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.task == null ? l10n.addTask : l10n.editTask),
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          widget.task == null ? l10n.addTask : l10n.editTask,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.secondary,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => context.go('/'),
@@ -267,8 +287,16 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     final l10n = L10n.of(context);
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(12),
+        color: Theme.of(context).cardColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Material(
         color: Colors.transparent,
@@ -384,15 +412,24 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             _priority = value;
           });
         },
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
+        borderRadius: BorderRadius.circular(12),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isSelected ? color : Colors.grey,
+              color: isSelected ? color : Colors.grey.withOpacity(0.3),
               width: isSelected ? 2 : 1,
             ),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
+            color: isSelected ? color.withOpacity(0.1) : Colors.transparent,
+            boxShadow: isSelected ? [
+              BoxShadow(
+                color: color.withOpacity(0.2),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ] : [],
           ),
           child: Column(
             children: [

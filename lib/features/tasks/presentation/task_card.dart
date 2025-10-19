@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/features/tasks/models/task.dart';
-import 'package:todo_app/core/theme/app_theme.dart';
 import 'package:todo_app/l10n/l10n.dart';
 
 class TaskCard extends StatefulWidget {
@@ -61,109 +60,170 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[
+      children: [
         Card(
+          elevation: 0,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          color: Colors.transparent,
           child: InkWell(
+            borderRadius: BorderRadius.circular(20),
             onTap: widget.onTap,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Transform.scale(
-                        scale: 1.2,
-                        child: ScaleTransition(
-                          scale: _checkScale,
-                          child: Checkbox(
-                            value: widget.task.completed,
-                            onChanged: _handleCheckboxChanged,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.surface,
+                    Theme.of(context).colorScheme.surface.withOpacity(0.95),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                    spreadRadius: 0,
+                  ),
+                ],
+                border: Border.all(
+                  color: widget.task.priority > 0
+                      ? _getPriorityColor(widget.task.priority).withOpacity(0.3)
+                      : Theme.of(context).colorScheme.onSurface.withOpacity(0.05),
+                  width: 1,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Transform.scale(
+                          scale: 1.2,
+                          child: ScaleTransition(
+                            scale: _checkScale,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: widget.task.completed
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                                  width: 2,
+                                ),
+                                gradient: widget.task.completed
+                                    ? LinearGradient(
+                                        colors: [
+                                          Theme.of(context).colorScheme.primary,
+                                          Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )
+                                    : null,
+                              ),
+                              child: Checkbox(
+                                value: widget.task.completed,
+                                onChanged: _handleCheckboxChanged,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                side: BorderSide.none,
+                                activeColor: Colors.transparent,
+                                checkColor: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              widget.task.title,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                decoration: widget.task.completed
-                                    ? TextDecoration.lineThrough
-                                    : null,
-                                color: widget.task.completed
-                                    ? Theme.of(context).colorScheme.onSurface.withOpacity(0.5)
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ),
-                            if (widget.task.note?.isNotEmpty ?? false) ...[
-                              const SizedBox(height: 4),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Text(
-                                widget.task.note!,
+                                widget.task.title,
                                 style: TextStyle(
-                                  color: widget.task.completed
-                                      ? Theme.of(context).colorScheme.onSurface.withOpacity(0.5)
-                                      : Theme.of(context).colorScheme.onSurface,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.2,
                                   decoration: widget.task.completed
                                       ? TextDecoration.lineThrough
                                       : null,
+                                  color: widget.task.completed
+                                      ? Theme.of(context).colorScheme.onSurface.withOpacity(0.4)
+                                      : Theme.of(context).colorScheme.onSurface,
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
                               ),
+                              if (widget.task.note?.isNotEmpty ?? false) ...[
+                                const SizedBox(height: 4),
+                                Text(
+                                  widget.task.note!,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  color: widget.task.completed
+                                        ? Theme.of(context).colorScheme.onSurface.withOpacity(0.4)
+                                        : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                  decoration: widget.task.completed
+                                        ? TextDecoration.lineThrough
+                                        : null,
+                                  height: 1.4,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      if (widget.task.dueDate != null)
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.event,
-                              size: 16,
-                              color: _getDueDateColor(widget.task.dueDate!),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              _formatDate(widget.task.dueDate!),
-                              style: TextStyle(
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (widget.task.dueDate != null)
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.event,
+                                size: 16,
                                 color: _getDueDateColor(widget.task.dueDate!),
                               ),
-                            ),
+                              const SizedBox(width: 4),
+                              Text(
+                                _formatDate(widget.task.dueDate!),
+                                style: TextStyle(
+                                  color: _getDueDateColor(widget.task.dueDate!),
+                                ),
+                              ),
+                            ],
+                          )
+                        else
+                          const SizedBox(),
+                        Row(
+                          children: [
+                            if (widget.task.reminderDate != null) ...[
+                              Icon(
+                                Icons.notifications,
+                                size: 16,
+                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
+                            _buildPriorityIndicator(widget.task.priority),
                           ],
-                        )
-                      else
-                        const SizedBox(),
-                      Row(
-                        children: <Widget>[
-                          if (widget.task.reminderDate != null) ...[
-                            Icon(
-                              Icons.notifications,
-                              size: 16,
-                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                            ),
-                            const SizedBox(width: 8),
-                          ],
-                          _buildPriorityIndicator(widget.task.priority),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -178,13 +238,27 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                        blurRadius: 16,
+                        spreadRadius: 1,
+                      ),
+                    ],
                   ),
                   child: const Icon(
                     Icons.check,
-                    color: Colors.green,
+                    color: Colors.white,
                     size: 32,
                   ),
                 ),
@@ -198,7 +272,7 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
   Widget _buildPriorityIndicator(int priority) {
     final color = _getPriorityColor(priority);
     return Row(
-      children: <Widget>[
+      children: [
         Icon(Icons.flag, size: 16, color: color),
         const SizedBox(width: 4),
         Text(
@@ -231,13 +305,13 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
   Color _getPriorityColor(int priority) {
     switch (priority) {
       case 1:
-        return Colors.blue;
+        return const Color(0xFF28A745); // Yumuşak yeşil
       case 2:
-        return Colors.orange;
+        return const Color(0xFFFFC107); // Yumuşak sarı
       case 3:
-        return Colors.red;
+        return const Color(0xFFDC3545); // Yumuşak kırmızı
       default:
-        return Colors.grey;
+        return const Color(0xFF6C757D); // Yumuşak gri
     }
   }
 

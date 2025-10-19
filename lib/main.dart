@@ -88,7 +88,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
 
       return MaterialApp.router(
       title: 'Todo App',
-      debugShowCheckedModeBanner: !config.isProduction,
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ref.watch(themeControllerProvider) ? ThemeMode.dark : ThemeMode.light,
