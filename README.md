@@ -1,43 +1,45 @@
-# Flutter Todo App
+# Modern Todo App
 
-A modern, feature-rich todo application built with Flutter. This app helps users manage their tasks efficiently with a clean and intuitive interface.
+A sleek and modern task management application built with Flutter, featuring a beautiful dark/light theme and smooth animations.
 
 ## Features
 
-- ✨ Clean and modern UI design
-- 🌓 Dark/Light theme support
-- 🌍 Multilingual (English and Turkish)
-- 🔔 Local notifications for task reminders
-- 📱 Cross-platform support (Windows, iOS, Android)
-- 🎯 Task prioritization
-- 📂 Project-based task organization
-- 🔄 Task status tracking
-- 📅 Due date and reminder management
+- 🎨 Modern UI with Material Design 3
+- 🌓 Dark and Light theme support
+- 🌍 Localization (English and Turkish)
+- 📱 Responsive design for all platforms
+- ✨ Smooth animations and transitions
+- 🗃️ Local SQLite database storage
+- 🔍 Task filtering and sorting
+- 📅 Due date and reminder support
+- 🚀 Priority levels with visual indicators
+
+## Screenshots
+
+[Coming soon]
 
 ## Tech Stack
 
-- **Framework**: Flutter
-- **State Management**: Riverpod
-- **Database**: Drift (SQLite)
-- **Navigation**: Go Router
-- **Localization**: Flutter Localizations
-- **Notifications**: Flutter Local Notifications
-- **Code Generation**: Build Runner, Freezed
-- **Architecture**: Clean Architecture principles
+- **Frontend:** Flutter
+- **State Management:** Riverpod
+- **Navigation:** GoRouter
+- **Database:** SQLite (drift)
+- **Architecture:** Clean Architecture
+- **Design System:** Material Design 3
 
 ## Getting Started
 
 ### Prerequisites
 
-- Flutter SDK
+- Flutter (Latest stable version)
 - Dart SDK
-- An IDE (VS Code, Android Studio, etc.)
+- VS Code or Android Studio
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/todo_app.git
+git clone https://github.com/ardcek/todo_app.git
 ```
 
 2. Navigate to the project directory:
@@ -50,12 +52,7 @@ cd todo_app
 flutter pub get
 ```
 
-4. Run code generation:
-```bash
-flutter pub run build_runner build --delete-conflicting-outputs
-```
-
-5. Run the app:
+4. Run the app:
 ```bash
 flutter run
 ```
@@ -64,18 +61,31 @@ flutter run
 
 ```
 lib/
-├── core/
-│   ├── config/      # App configuration
-│   ├── database/    # Database setup
-│   ├── router/      # Navigation
-│   └── theme/       # App theming
-├── features/
-│   └── tasks/
-│       ├── data/    # Repositories
-│       ├── models/  # Data models
-│       └── presentation/  # UI components
-└── l10n/           # Localization files
+├── core/           # Core functionality
+│   ├── config/     # App configuration
+│   ├── database/   # Database setup
+│   ├── router/     # Navigation setup
+│   └── theme/      # Theme configuration
+├── features/       # Feature modules
+│   └── tasks/      # Task management feature
+│       ├── models/     # Data models
+│       └── presentation/ # UI components
+└── l10n/          # Localization
 ```
+
+## Version History
+
+- **v0.2** - Modern UI Update
+  - Complete UI overhaul with modern design system
+  - New color system for light/dark themes
+  - Improved animations and transitions
+  - Enhanced visual hierarchy
+
+- **v0.1** - Initial Release
+  - Basic task management functionality
+  - SQLite database integration
+  - Dark/Light theme toggle
+  - Localization support
 
 ## Contributing
 
@@ -83,4 +93,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
