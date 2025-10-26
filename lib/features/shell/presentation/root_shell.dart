@@ -175,67 +175,86 @@ class _FABButton extends ConsumerWidget {
                   autofocus: true,
                   decoration: InputDecoration(
                     hintText: language == 'en' ? 'Project name' : 'Proje adı',
-                    border: const OutlineInputBorder(),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                    filled: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
                 Text(
                   language == 'en' ? 'Color' : 'Renk',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Wrap(
-                  spacing: 8,
+                  spacing: 12,
+                  runSpacing: 12,
                   children: colors.map((color) {
                     return InkWell(
                       onTap: () => setDialogState(() => selectedColor = color),
+                      borderRadius: BorderRadius.circular(24),
                       child: Container(
-                        width: 40,
-                        height: 40,
+                        width: 48,
+                        height: 48,
                         decoration: BoxDecoration(
                           color: color,
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: selectedColor == color
-                                ? Colors.black
-                                : Colors.transparent,
-                            width: 3,
-                          ),
+                          boxShadow: selectedColor == color
+                              ? [
+                                  BoxShadow(
+                                    color: color.withOpacity(0.5),
+                                    blurRadius: 8,
+                                    spreadRadius: 2,
+                                  )
+                                ]
+                              : null,
                         ),
                         child: selectedColor == color
-                            ? const Icon(Icons.check, color: Colors.white)
+                            ? const Icon(Icons.check_rounded, color: Colors.white, size: 28)
                             : null,
                       ),
                     );
                   }).toList(),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
                 Text(
                   language == 'en' ? 'Icon' : 'İkon',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Wrap(
-                  spacing: 8,
+                  spacing: 12,
+                  runSpacing: 12,
                   children: icons.map((icon) {
                     return InkWell(
                       onTap: () => setDialogState(() => selectedIcon = icon),
+                      borderRadius: BorderRadius.circular(12),
                       child: Container(
-                        width: 40,
-                        height: 40,
+                        width: 52,
+                        height: 52,
                         decoration: BoxDecoration(
                           color: selectedIcon == icon
-                              ? selectedColor.withOpacity(0.2)
-                              : Colors.grey.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
+                              ? selectedColor.withOpacity(0.15)
+                              : Colors.grey.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: selectedIcon == icon
                                 ? selectedColor
                                 : Colors.transparent,
-                            width: 2,
+                            width: 2.5,
                           ),
                         ),
-                        child: Icon(icon, color: selectedColor),
+                        child: Icon(
+                          icon,
+                          color: selectedIcon == icon ? selectedColor : Colors.grey[600],
+                          size: 28,
+                        ),
                       ),
                     );
                   }).toList(),

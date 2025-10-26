@@ -11,40 +11,54 @@ class TaskSnoozeDialog extends ConsumerWidget {
     final theme = Theme.of(context);
     
     return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
-                Icon(Icons.schedule, color: theme.colorScheme.primary),
-                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.schedule_rounded,
+                    color: theme.colorScheme.primary,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 12),
                 Text(
                   language == 'en' ? 'Snooze Task' : 'Görevi Ertele',
-                  style: theme.textTheme.titleLarge,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 24),
             // Hızlı erteleme seçenekleri
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 10,
+              runSpacing: 10,
               children: [
                 _QuickSnoozeChip(
-                  icon: Icons.timer,
+                  icon: Icons.access_time_rounded,
                   label: '1 ${language == 'en' ? 'hour' : 'saat'}',
                   onTap: () => _handleSnooze(context, Duration(hours: 1)),
                 ),
                 _QuickSnoozeChip(
-                  icon: Icons.timer,
+                  icon: Icons.hourglass_bottom_rounded,
                   label: '4 ${language == 'en' ? 'hours' : 'saat'}',
                   onTap: () => _handleSnooze(context, Duration(hours: 4)),
                 ),
                 _QuickSnoozeChip(
-                  icon: Icons.wb_sunny,
+                  icon: Icons.wb_sunny_rounded,
                   label: language == 'en' ? 'Tomorrow 9:00' : 'Yarın 09:00',
                   onTap: () => _handleSnooze(
                     context,
@@ -53,17 +67,25 @@ class TaskSnoozeDialog extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
+            Divider(color: theme.colorScheme.outlineVariant),
+            const SizedBox(height: 20),
             // Özel tarih seçimi
-            OutlinedButton.icon(
-              icon: const Icon(Icons.calendar_month),
+            FilledButton.tonalIcon(
+              icon: const Icon(Icons.calendar_month_rounded),
               label: Text(language == 'en' ? 'Pick Date/Time' : 'Tarih/Saat Seç'),
               onPressed: () => _showDateTimePicker(context),
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             // İptal butonu
-            TextButton(
+            OutlinedButton(
               onPressed: () => Navigator.pop(context),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
               child: Text(language == 'en' ? 'Cancel' : 'İptal'),
             ),
           ],
@@ -128,22 +150,48 @@ class _QuickSnoozeChip extends StatelessWidget {
     
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(24),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: theme.colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+            colors: [
+              theme.colorScheme.primaryContainer,
+              theme.colorScheme.primaryContainer.withOpacity(0.7),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: theme.colorScheme.primary.withOpacity(0.15),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 16, color: theme.colorScheme.primary),
-            const SizedBox(width: 4),
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                size: 18,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            const SizedBox(width: 8),
             Text(
               label,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.onPrimaryContainer,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],

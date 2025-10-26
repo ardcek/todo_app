@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/features/tasks/presentation/models/project_model.dart';
 import 'package:todo_app/features/tasks/presentation/project_detail_page.dart';
 import 'package:todo_app/core/config/language_controller.dart';
+import 'package:todo_app/features/timer/presentation/timer_widget.dart';
 
 // Provider for managing projects
 final projectsProvider = StateNotifierProvider<ProjectsNotifier, List<Project>>((ref) {
@@ -69,8 +70,15 @@ class ProjectsPage extends ConsumerWidget {
 
     return ListView.builder(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 96),
-      itemCount: projects.length,
+      itemCount: projects.length + 1,
       itemBuilder: (context, index) {
+        if (index == projects.length) {
+          return const Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: TimerWidget(),
+          );
+        }
+        
         final project = projects[index];
         return RepaintBoundary(
           child: _ProjectCard(

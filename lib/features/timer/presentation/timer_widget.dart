@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/features/timer/presentation/timer_controller.dart';
+import 'package:todo_app/core/config/language_controller.dart';
 
 class TimerWidget extends ConsumerWidget {
   const TimerWidget({super.key});
@@ -101,6 +102,8 @@ class TimerWidget extends ConsumerWidget {
   }
 
   Widget _buildStartTimer(BuildContext context, WidgetRef ref) {
+    final language = ref.watch(languageControllerProvider);
+    
     return Card(
       margin: const EdgeInsets.all(16),
       child: Padding(
@@ -113,7 +116,7 @@ class TimerWidget extends ConsumerWidget {
                 Icon(Icons.timer_outlined, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
                 Text(
-                  'Focus Timer',
+                  language == 'en' ? 'Focus Timer' : 'Odaklanma Zamanlayıcısı',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
@@ -132,7 +135,7 @@ class TimerWidget extends ConsumerWidget {
             OutlinedButton.icon(
               onPressed: () => _showCustomTimerDialog(context, ref),
               icon: const Icon(Icons.edit_outlined, size: 18),
-              label: const Text('Custom'),
+              label: Text(language == 'en' ? 'Custom' : 'Özel'),
             ),
           ],
         ),
@@ -148,33 +151,34 @@ class TimerWidget extends ConsumerWidget {
   }
 
   void _showCustomTimerDialog(BuildContext context, WidgetRef ref) {
+    final language = ref.read(languageControllerProvider);
     final hoursController = TextEditingController(text: '0');
     final minutesController = TextEditingController(text: '25');
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Custom Timer'),
+        title: Text(language == 'en' ? 'Custom Timer' : 'Özel Zamanlayıcı'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: hoursController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Hours',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.access_time),
+              decoration: InputDecoration(
+                labelText: language == 'en' ? 'Hours' : 'Saat',
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.access_time),
               ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: minutesController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Minutes',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.schedule),
+              decoration: InputDecoration(
+                labelText: language == 'en' ? 'Minutes' : 'Dakika',
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.schedule),
               ),
             ),
           ],
@@ -182,7 +186,7 @@ class TimerWidget extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(language == 'en' ? 'Cancel' : 'İptal'),
           ),
           FilledButton(
             onPressed: () {
@@ -191,14 +195,26 @@ class TimerWidget extends ConsumerWidget {
               
               if (hours == 0 && minutes == 0) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please enter a valid duration')),
+                  SnackBar(
+                    content: Text(
+                      language == 'en' 
+                          ? 'Please enter a valid duration' 
+                          : 'Lütfen geçerli bir süre girin',
+                    ),
+                  ),
                 );
                 return;
               }
               
               if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Invalid time range')),
+                  SnackBar(
+                    content: Text(
+                      language == 'en' 
+                          ? 'Invalid time range' 
+                          : 'Geçersiz zaman aralığı',
+                    ),
+                  ),
                 );
                 return;
               }
@@ -207,7 +223,7 @@ class TimerWidget extends ConsumerWidget {
               ref.read(timerProvider.notifier).startTimer(duration, 'Focus Session');
               Navigator.pop(context);
             },
-            child: const Text('Start'),
+            child: Text(language == 'en' ? 'Start' : 'Başlat'),
           ),
         ],
       ),

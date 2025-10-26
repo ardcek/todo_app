@@ -17,18 +17,21 @@ void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
     
-    // Optimize rendering
-    WidgetsBinding.instance.renderView.automaticSystemUiAdjustment = false;
+    // Optimize rendering for better performance
+    // Note: Configuration is only available after first frame
+    // WidgetsBinding.instance.renderView.automaticSystemUiAdjustment = false;
 
     final container = ProviderContainer();
   
-    // Initialize database in background
+    // Initialize database in background with optimization
     unawaited(AppDatabase.getInstance());
     
-    // Initialize services
-    await container.read(notificationServiceProvider).initialize();
-    await container.read(timerNotificationServiceProvider).initialize();
-    await container.read(localeControllerProvider.notifier).loadSavedLocale();
+    // Parallelize service initialization for faster startup
+    await Future.wait([
+      container.read(notificationServiceProvider).initialize(),
+      container.read(timerNotificationServiceProvider).initialize(),
+      container.read(localeControllerProvider.notifier).loadSavedLocale(),
+    ]);
 
     runApp(
       UncontrolledProviderScope(
@@ -38,7 +41,8 @@ void main() async {
     );
   } catch (e, stack) {
     rethrow;
-  }}class MyApp extends ConsumerStatefulWidget {
+  }
+}class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
@@ -93,15 +97,16 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: ref.watch(themeControllerProvider) ? ThemeMode.dark : ThemeMode.light,
-      themeAnimationDuration: Duration.zero,
-      themeAnimationCurve: Curves.linear,
+      themeAnimationDuration: const Duration(milliseconds: 200), // Faster theme transition
+      themeAnimationCurve: Curves.easeInOut,
       routerConfig: appRouter,
       builder: (context, child) {
+        // Optimize scroll performance
         return ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(
             scrollbars: false,
             overscroll: false,
-            physics: const ClampingScrollPhysics(),
+            physics: const BouncingScrollPhysics(), // Smoother scrolling
           ),
           child: child!,
         );

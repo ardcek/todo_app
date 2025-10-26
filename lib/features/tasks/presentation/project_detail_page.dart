@@ -299,11 +299,12 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage> {
                             );
                             if (result != null) {
                               setState(() {
-                                task.title = result['title'];
-                                task.priorityIdx = result['priorityIdx'];
-                                task.dueDate = result['dueDate'];
-                                task.dueLabel = result['dueDate'] != null 
-                                    ? _formatDateTime(result['dueDate']) 
+                                task.title = result['title'] as String;
+                                task.priorityIdx = result['priorityIdx'] as int;
+                                final dueDate = result['dueDate'] as DateTime?;
+                                task.dueDate = dueDate;
+                                task.dueLabel = dueDate != null 
+                                    ? _formatDateTime(dueDate) 
                                     : null;
                               });
                               ref.read(projectsProvider.notifier).updateProject(_project);
