@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:todo_app/core/theme/app_theme.dart';
 import 'package:todo_app/features/tasks/data/task_repository.dart';
 import 'package:todo_app/features/tasks/models/task.dart';
 import 'package:todo_app/l10n/l10n.dart';
@@ -215,7 +214,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
               value: _dueDate,
               icon: Icons.event,
               color: _dueDate?.isBefore(DateTime.now()) ?? false
-                  ? AppTheme.errorColor
+                  ? Theme.of(context).colorScheme.error
                   : null,
               onTap: () => _selectDate(context, false),
               onClear: () => setState(() => _dueDate = null),
@@ -226,7 +225,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
               value: _reminderDate,
               icon: Icons.notifications,
               color: _reminderDate?.isBefore(DateTime.now()) ?? false
-                  ? AppTheme.errorColor
+                  ? Theme.of(context).colorScheme.error
                   : null,
               onTap: () => _selectDate(context, true),
               onClear: () => setState(() => _reminderDate = null),

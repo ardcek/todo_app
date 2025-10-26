@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/core/config/app_config.dart';
+import 'package:todo_app/core/config/language_controller.dart';
 import 'package:todo_app/core/router/router.dart';
 import 'package:todo_app/core/theme/app_theme.dart';
 import 'package:todo_app/core/theme/theme_controller.dart';
@@ -10,24 +10,24 @@ import 'package:todo_app/core/config/locale_controller.dart';
 import 'package:todo_app/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:todo_app/features/tasks/data/notification_service.dart';
+import 'package:todo_app/features/timer/presentation/timer_notification_service.dart';
 import 'package:todo_app/core/database/database.dart';
-import 'dart:async';
 
 void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
     
-    // Optimize animations
+    // Optimize rendering
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment = false;
-    await Future.delayed(const Duration(milliseconds: 100));
 
     final container = ProviderContainer();
   
-    // Initialize database
+    // Initialize database in background
     unawaited(AppDatabase.getInstance());
     
     // Initialize services
     await container.read(notificationServiceProvider).initialize();
+    await container.read(timerNotificationServiceProvider).initialize();
     await container.read(localeControllerProvider.notifier).loadSavedLocale();
 
     runApp(
@@ -85,17 +85,24 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     try {
       final locale = ref.watch(localeControllerProvider);
+      final language = ref.watch(languageControllerProvider);
 
       return MaterialApp.router(
       title: 'Todo App',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
       themeMode: ref.watch(themeControllerProvider) ? ThemeMode.dark : ThemeMode.light,
+      themeAnimationDuration: Duration.zero,
+      themeAnimationCurve: Curves.linear,
       routerConfig: appRouter,
       builder: (context, child) {
         return ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          behavior: ScrollConfiguration.of(context).copyWith(
+            scrollbars: false,
+            overscroll: false,
+            physics: const ClampingScrollPhysics(),
+          ),
           child: child!,
         );
       },
@@ -109,7 +116,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         Locale('en'),
         Locale('tr'),
       ],
-      locale: Locale(locale),
+      locale: Locale(language), // Use language controller instead of locale controller
     );
     } catch (e) {
       return MaterialApp(

@@ -128,4 +128,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noTasksDescription =>
       'Your task list is empty. Get started by adding your first task.';
+
+  @override
+  String get snoozeTask => 'Snooze Task';
+
+  @override
+  String taskSnoozed(String taskTitle, String newDate) {
+    return '$taskTitle snoozed until $newDate';
+  }
+
+  @override
+  String get pickDateTime => 'Pick Date & Time';
+
+  @override
+  String get oneHour => '1 hour';
+
+  @override
+  String get fourHours => '4 hours';
+
+  @override
+  String get tomorrow9am => 'Tomorrow 9:00';
+
+  @override
+  String get undo => 'Undo';
 }

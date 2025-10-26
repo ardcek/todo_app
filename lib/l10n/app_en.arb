@@ -44,5 +44,23 @@
   "completed": "Completed",
   "incomplete": "Incomplete",
   "noResults": "No results found",
-  "noTasksDescription": "Your task list is empty. Get started by adding your first task."
+  "noTasksDescription": "Your task list is empty. Get started by adding your first task.",
+  
+  "snoozeTask": "Snooze Task",
+  "taskSnoozed": "{taskTitle} snoozed until {newDate}",
+  "@taskSnoozed": {
+    "placeholders": {
+      "taskTitle": {
+        "type": "String"
+      },
+      "newDate": {
+        "type": "String"
+      }
+    }
+  },
+  "pickDateTime": "Pick Date & Time",
+  "oneHour": "1 hour",
+  "fourHours": "4 hours",
+  "tomorrow9am": "Tomorrow 9:00",
+  "undo": "Undo"
 }

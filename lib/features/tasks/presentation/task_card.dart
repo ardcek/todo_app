@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/features/tasks/models/task.dart';
 import 'package:todo_app/l10n/l10n.dart';
+import 'package:todo_app/features/tasks/presentation/task_options_button.dart';
 
 class TaskCard extends StatefulWidget {
   final Task task;
   final VoidCallback onTap;
   final ValueChanged<bool?> onCheckboxChanged;
+  final ValueChanged<Task>? onUpdate;
 
   const TaskCard({
     super.key,
     required this.task,
     required this.onTap,
     required this.onCheckboxChanged,
+    this.onUpdate,
   });
 
   @override
@@ -218,6 +221,45 @@ class _TaskCardState extends State<TaskCard> with SingleTickerProviderStateMixin
                               const SizedBox(width: 8),
                             ],
                             _buildPriorityIndicator(widget.task.priority),
+                            TaskOptionsButton(
+                              onSnooze: widget.task.completed ? null : (duration) {
+                                final baseTime = widget.task.dueDate ?? DateTime.now();
+                                final newDueDate = baseTime.add(duration);
+                                final updatedTask = widget.task.copyWith(
+                                  dueDate: newDueDate,
+                                  snoozedUntil: newDueDate,
+                                  originalDueDate: widget.task.dueDate ?? baseTime,
+                                );
+                                widget.onUpdate?.call(updatedTask);
+                                
+                                // Snackbar göster
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      L10n.of(context).taskSnoozed(
+                                        widget.task.title,
+                                        _formatDate(newDueDate),
+                                      ),
+                                    ),
+                                    action: SnackBarAction(
+                                      label: L10n.of(context).undo,
+                                      onPressed: () {
+                                        // Eski haline geri döndür
+                                        widget.onUpdate?.call(widget.task);
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                              onEdit: () {
+                                // TODO: Implement edit
+                                debugPrint('Edit task');
+                              },
+                              onDelete: () {
+                                // TODO: Implement delete
+                                debugPrint('Delete task');
+                              },
+                            ),
                           ],
                         ),
                       ],

@@ -1,0 +1,17 @@
+{
+  "elements": {},
+  "imports": [
+    "package:flutter/material.dart",
+    "package:flutter_riverpod/flutter_riverpod.dart",
+    "package:todo_app/core/config/app_config.dart",
+    "package:todo_app/core/config/language_controller.dart",
+    "package:todo_app/core/router/router.dart",
+    "package:todo_app/core/theme/app_theme.dart",
+    "package:todo_app/core/theme/theme_controller.dart",
+    "package:todo_app/core/config/locale_controller.dart",
+    "package:todo_app/l10n/app_localizations.dart",
+    "package:flutter_localizations/flutter_localizations.dart",
+    "package:todo_app/features/tasks/data/notification_service.dart",
+    "package:todo_app/core/database/database.dart"
+  ]
+}

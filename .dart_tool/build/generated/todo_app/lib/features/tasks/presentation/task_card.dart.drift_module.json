@@ -1,0 +1,8 @@
+{
+  "elements": {},
+  "imports": [
+    "package:flutter/material.dart",
+    "package:todo_app/features/tasks/models/task.dart",
+    "package:todo_app/l10n/l10n.dart"
+  ]
+}

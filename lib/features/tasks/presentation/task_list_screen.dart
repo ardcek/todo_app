@@ -231,6 +231,11 @@ class TaskListScreen extends ConsumerWidget {
                                     .read(taskListNotifierProvider.notifier)
                                     .toggleTaskCompleted(task);
                               },
+                              onUpdate: (updatedTask) {
+                                ref
+                                    .read(taskListNotifierProvider.notifier)
+                                    .updateTask(updatedTask);
+                              },
                             ),
                           );
                         },

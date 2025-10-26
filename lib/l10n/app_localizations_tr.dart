@@ -128,4 +128,27 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get noTasksDescription =>
       'Görev listeniz boş. İlk görevinizi ekleyerek başlayın.';
+
+  @override
+  String get snoozeTask => 'Görevi Ertele';
+
+  @override
+  String taskSnoozed(String taskTitle, String newDate) {
+    return '$taskTitle görevi $newDate tarihine ertelendi';
+  }
+
+  @override
+  String get pickDateTime => 'Tarih ve Saat Seç';
+
+  @override
+  String get oneHour => '1 saat';
+
+  @override
+  String get fourHours => '4 saat';
+
+  @override
+  String get tomorrow9am => 'Yarın 09:00';
+
+  @override
+  String get undo => 'Geri Al';
 }

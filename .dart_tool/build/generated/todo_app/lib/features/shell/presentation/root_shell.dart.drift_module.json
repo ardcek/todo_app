@@ -1,0 +1,15 @@
+{
+  "elements": {},
+  "imports": [
+    "package:flutter/material.dart",
+    "package:flutter_riverpod/flutter_riverpod.dart",
+    "package:todo_app/core/config/language_controller.dart",
+    "package:todo_app/core/theme/theme_controller.dart",
+    "package:todo_app/features/tasks/presentation/add_task_sheet.dart",
+    "package:todo_app/features/tasks/presentation/projects_page.dart",
+    "package:todo_app/features/tasks/presentation/today_page.dart",
+    "package:todo_app/features/tasks/presentation/upcoming_page.dart",
+    "package:todo_app/features/tasks/presentation/today_page.dart",
+    "package:todo_app/features/timer/presentation/timer_widget.dart"
+  ]
+}

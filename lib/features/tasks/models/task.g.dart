@@ -25,6 +25,12 @@ _$TaskImpl _$$TaskImplFromJson(Map<String, dynamic> json) => _$TaskImpl(
   deletedAt: json['deletedAt'] == null
       ? null
       : DateTime.parse(json['deletedAt'] as String),
+  snoozedUntil: json['snoozedUntil'] == null
+      ? null
+      : DateTime.parse(json['snoozedUntil'] as String),
+  originalDueDate: json['originalDueDate'] == null
+      ? null
+      : DateTime.parse(json['originalDueDate'] as String),
 );
 
 Map<String, dynamic> _$$TaskImplToJson(_$TaskImpl instance) =>
@@ -41,4 +47,6 @@ Map<String, dynamic> _$$TaskImplToJson(_$TaskImpl instance) =>
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
       'deletedAt': instance.deletedAt?.toIso8601String(),
+      'snoozedUntil': instance.snoozedUntil?.toIso8601String(),
+      'originalDueDate': instance.originalDueDate?.toIso8601String(),
     };

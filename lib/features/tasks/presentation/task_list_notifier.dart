@@ -66,6 +66,12 @@ class TaskListNotifier extends _$TaskListNotifier {
     state = await AsyncValue.guard(() => _loadAndFilterTasks());
   }
 
+  Future<void> updateTask(Task task) async {
+    await ref.read(taskRepositoryProvider).updateTask(task);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => _loadAndFilterTasks());
+  }
+
   Future<List<Task>> _loadAndFilterTasks() async {
     try {
       debugPrint('Loading and filtering tasks...');

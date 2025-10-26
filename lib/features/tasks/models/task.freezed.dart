@@ -33,6 +33,8 @@ mixin _$Task {
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
   DateTime? get deletedAt => throw _privateConstructorUsedError;
+  DateTime? get snoozedUntil => throw _privateConstructorUsedError;
+  DateTime? get originalDueDate => throw _privateConstructorUsedError;
 
   /// Serializes this Task to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -61,6 +63,8 @@ abstract class $TaskCopyWith<$Res> {
     DateTime createdAt,
     DateTime updatedAt,
     DateTime? deletedAt,
+    DateTime? snoozedUntil,
+    DateTime? originalDueDate,
   });
 }
 
@@ -91,6 +95,8 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
     Object? createdAt = null,
     Object? updatedAt = null,
     Object? deletedAt = freezed,
+    Object? snoozedUntil = freezed,
+    Object? originalDueDate = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -142,6 +148,14 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
                 ? _value.deletedAt
                 : deletedAt // ignore: cast_nullable_to_non_nullable
                       as DateTime?,
+            snoozedUntil: freezed == snoozedUntil
+                ? _value.snoozedUntil
+                : snoozedUntil // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            originalDueDate: freezed == originalDueDate
+                ? _value.originalDueDate
+                : originalDueDate // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
           )
           as $Val,
     );
@@ -169,6 +183,8 @@ abstract class _$$TaskImplCopyWith<$Res> implements $TaskCopyWith<$Res> {
     DateTime createdAt,
     DateTime updatedAt,
     DateTime? deletedAt,
+    DateTime? snoozedUntil,
+    DateTime? originalDueDate,
   });
 }
 
@@ -196,6 +212,8 @@ class __$$TaskImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
     Object? deletedAt = freezed,
+    Object? snoozedUntil = freezed,
+    Object? originalDueDate = freezed,
   }) {
     return _then(
       _$TaskImpl(
@@ -247,6 +265,14 @@ class __$$TaskImplCopyWithImpl<$Res>
             ? _value.deletedAt
             : deletedAt // ignore: cast_nullable_to_non_nullable
                   as DateTime?,
+        snoozedUntil: freezed == snoozedUntil
+            ? _value.snoozedUntil
+            : snoozedUntil // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        originalDueDate: freezed == originalDueDate
+            ? _value.originalDueDate
+            : originalDueDate // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
       ),
     );
   }
@@ -268,6 +294,8 @@ class _$TaskImpl implements _Task {
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
+    this.snoozedUntil,
+    this.originalDueDate,
   });
 
   factory _$TaskImpl.fromJson(Map<String, dynamic> json) =>
@@ -299,10 +327,14 @@ class _$TaskImpl implements _Task {
   final DateTime updatedAt;
   @override
   final DateTime? deletedAt;
+  @override
+  final DateTime? snoozedUntil;
+  @override
+  final DateTime? originalDueDate;
 
   @override
   String toString() {
-    return 'Task(id: $id, title: $title, note: $note, dueDate: $dueDate, reminderDate: $reminderDate, priority: $priority, project: $project, completed: $completed, orderIndex: $orderIndex, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
+    return 'Task(id: $id, title: $title, note: $note, dueDate: $dueDate, reminderDate: $reminderDate, priority: $priority, project: $project, completed: $completed, orderIndex: $orderIndex, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, snoozedUntil: $snoozedUntil, originalDueDate: $originalDueDate)';
   }
 
   @override
@@ -328,7 +360,11 @@ class _$TaskImpl implements _Task {
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.deletedAt, deletedAt) ||
-                other.deletedAt == deletedAt));
+                other.deletedAt == deletedAt) &&
+            (identical(other.snoozedUntil, snoozedUntil) ||
+                other.snoozedUntil == snoozedUntil) &&
+            (identical(other.originalDueDate, originalDueDate) ||
+                other.originalDueDate == originalDueDate));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -347,6 +383,8 @@ class _$TaskImpl implements _Task {
     createdAt,
     updatedAt,
     deletedAt,
+    snoozedUntil,
+    originalDueDate,
   );
 
   /// Create a copy of Task
@@ -377,6 +415,8 @@ abstract class _Task implements Task {
     required final DateTime createdAt,
     required final DateTime updatedAt,
     final DateTime? deletedAt,
+    final DateTime? snoozedUntil,
+    final DateTime? originalDueDate,
   }) = _$TaskImpl;
 
   factory _Task.fromJson(Map<String, dynamic> json) = _$TaskImpl.fromJson;
@@ -405,6 +445,10 @@ abstract class _Task implements Task {
   DateTime get updatedAt;
   @override
   DateTime? get deletedAt;
+  @override
+  DateTime? get snoozedUntil;
+  @override
+  DateTime? get originalDueDate;
 
   /// Create a copy of Task
   /// with the given fields replaced by the non-null parameter values.

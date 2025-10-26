@@ -331,6 +331,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your task list is empty. Get started by adding your first task.'**
   String get noTasksDescription;
+
+  /// No description provided for @snoozeTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze Task'**
+  String get snoozeTask;
+
+  /// No description provided for @taskSnoozed.
+  ///
+  /// In en, this message translates to:
+  /// **'{taskTitle} snoozed until {newDate}'**
+  String taskSnoozed(String taskTitle, String newDate);
+
+  /// No description provided for @pickDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Date & Time'**
+  String get pickDateTime;
+
+  /// No description provided for @oneHour.
+  ///
+  /// In en, this message translates to:
+  /// **'1 hour'**
+  String get oneHour;
+
+  /// No description provided for @fourHours.
+  ///
+  /// In en, this message translates to:
+  /// **'4 hours'**
+  String get fourHours;
+
+  /// No description provided for @tomorrow9am.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow 9:00'**
+  String get tomorrow9am;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
 }
 
 class _AppLocalizationsDelegate

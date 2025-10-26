@@ -18,6 +18,8 @@ class Task with _$Task {
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
+    DateTime? snoozedUntil,
+    DateTime? originalDueDate,
   }) = _Task;
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);

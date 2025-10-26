@@ -44,5 +44,23 @@
   "completed": "Tamamlanan",
   "incomplete": "Tamamlanmayan",
   "noResults": "Sonuç bulunamadı",
-  "noTasksDescription": "Görev listeniz boş. İlk görevinizi ekleyerek başlayın."
+  "noTasksDescription": "Görev listeniz boş. İlk görevinizi ekleyerek başlayın.",
+  
+  "snoozeTask": "Görevi Ertele",
+  "taskSnoozed": "{taskTitle} görevi {newDate} tarihine ertelendi",
+  "@taskSnoozed": {
+    "placeholders": {
+      "taskTitle": {
+        "type": "String"
+      },
+      "newDate": {
+        "type": "String"
+      }
+    }
+  },
+  "pickDateTime": "Tarih ve Saat Seç",
+  "oneHour": "1 saat",
+  "fourHours": "4 saat",
+  "tomorrow9am": "Yarın 09:00",
+  "undo": "Geri Al"
 }
