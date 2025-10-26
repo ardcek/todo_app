@@ -136,6 +136,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Arda**
 - GitHub: [@ardcek](https://github.com/ardcek)
+- Instagram: [@ardcek](https://instagram.com/ardcek)
 
 ## 🙏 Acknowledgments
 
