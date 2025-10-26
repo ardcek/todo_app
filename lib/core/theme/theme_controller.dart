@@ -17,9 +17,15 @@ class ThemeController extends StateNotifier<bool> {
     state = prefs.getBool(_key) ?? false;
   }
 
-  Future<void> toggleTheme() async {
-    final prefs = await SharedPreferences.getInstance();
+  void toggleTheme() {
+    // Update state immediately for instant UI response
     state = !state;
-    await prefs.setBool(_key, state);
+    // Save to storage asynchronously without blocking
+    _saveTheme(state);
+  }
+
+  Future<void> _saveTheme(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_key, value);
   }
 }

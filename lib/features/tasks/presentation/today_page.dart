@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/features/tasks/presentation/widgets/task_card.dart';
+import 'package:todo_app/features/tasks/presentation/widgets/task_stats_widget.dart';
 import 'package:todo_app/core/config/language_controller.dart';
 import 'package:todo_app/features/tasks/presentation/edit_task_dialog.dart';
 
@@ -40,21 +41,29 @@ class TodayTasksNotifier extends StateNotifier<List<DemoTask>> {
   List<DemoTask> get todayTasks {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    return state.where((task) {
+    final filtered = state.where((task) {
       if (task.dueLabel == null) return true; // No date = today
       if (task.dueLabel!.startsWith('Bugün')) return true;
       return false;
     }).toList();
+    
+    // Sort by priority: High (2) > Medium (1) > Low (0)
+    filtered.sort((a, b) => b.priorityIdx.compareTo(a.priorityIdx));
+    return filtered;
   }
 
   List<DemoTask> get upcomingTasks {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    return state.where((task) {
+    final filtered = state.where((task) {
       if (task.dueLabel == null) return false;
       if (task.dueLabel!.startsWith('Bugün')) return false;
       return true; // Tomorrow or later
     }).toList();
+    
+    // Sort by priority: High (2) > Medium (1) > Low (0)
+    filtered.sort((a, b) => b.priorityIdx.compareTo(a.priorityIdx));
+    return filtered;
   }
 }
 
@@ -80,6 +89,11 @@ class TodayPage extends ConsumerWidget {
     final allTasks = ref.watch(todayTasksProvider);
     final tasks = ref.read(todayTasksProvider.notifier).todayTasks;
     final language = ref.watch(languageControllerProvider);
+    
+    // Calculate stats
+    final completedCount = tasks.where((t) => t.completed).length;
+    final remainingCount = tasks.where((t) => !t.completed).length;
+    final progress = tasks.isEmpty ? 0.0 : completedCount / tasks.length;
     
     if (tasks.isEmpty) {
       return Center(
@@ -114,11 +128,19 @@ class TodayPage extends ConsumerWidget {
     return Semantics(
       header: true,
       container: true,
-      child: ListView.separated(
-        padding: const EdgeInsets.only(bottom: 96),
-        itemCount: tasks.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 0),
-        itemBuilder: (context, index) {
+      child: Column(
+        children: [
+          TaskStatsWidget(
+            completed: completedCount,
+            remaining: remainingCount,
+            progress: progress,
+          ),
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.only(bottom: 96),
+              itemCount: tasks.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 0),
+              itemBuilder: (context, index) {
           final t = tasks[index];
           final actualIndex = allTasks.indexOf(t);
           return RepaintBoundary(
@@ -181,6 +203,9 @@ class TodayPage extends ConsumerWidget {
             ),
           );
         },
+      ),
+          ),
+        ],
       ),
     );
   }

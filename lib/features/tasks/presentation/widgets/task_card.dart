@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/features/timer/presentation/timer_controller.dart';
+import 'package:todo_app/core/config/language_controller.dart';
 
 enum Priority { low, medium, high }
 
@@ -39,15 +40,16 @@ class TaskCard extends ConsumerWidget {
     }
   }
 
-  String get priorityLabel => switch (priority) {
-        Priority.low => 'Low',
-        Priority.medium => 'Med',
-        Priority.high => 'High',
+  String _priorityLabel(String language) => switch (priority) {
+        Priority.low => language == 'en' ? 'Low' : 'Düşük',
+        Priority.medium => language == 'en' ? 'Med' : 'Orta',
+        Priority.high => language == 'en' ? 'High' : 'Yüksek',
       };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
+    final language = ref.watch(languageControllerProvider);
 
     return Dismissible(
       key: ValueKey('$title-$priority-$dueLabel'),
@@ -116,7 +118,7 @@ class TaskCard extends ConsumerWidget {
                               side: BorderSide(color: scheme.outlineVariant),
                             ),
                           Chip(
-                            label: Text(priorityLabel),
+                            label: Text(_priorityLabel(language)),
                             visualDensity: VisualDensity.compact,
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             side: BorderSide(color: _priorityBorder(scheme)),
@@ -172,47 +174,149 @@ class TaskCard extends ConsumerWidget {
   }
 
   void _showTimerDialog(BuildContext context, WidgetRef ref) {
+    final language = ref.read(languageControllerProvider);
+    
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Timer: $title'),
+        title: Row(
+          children: [
+            const Icon(Icons.timer),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Focus timer başlat'),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Text(language == 'en' ? 'Start focus timer' : 'Odaklanma zamanlayıcısı başlat'),
+            const SizedBox(height: 20),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
               children: [
-                ElevatedButton(
+                _TimerButton(
+                  label: '15m',
                   onPressed: () {
                     Navigator.pop(context);
                     ref.read(timerProvider.notifier).startTimer(const Duration(minutes: 15), title);
                   },
-                  child: const Text('15m'),
                 ),
-                ElevatedButton(
+                _TimerButton(
+                  label: '25m',
                   onPressed: () {
                     Navigator.pop(context);
                     ref.read(timerProvider.notifier).startTimer(const Duration(minutes: 25), title);
                   },
-                  child: const Text('25m'),
                 ),
-                ElevatedButton(
+                _TimerButton(
+                  label: '45m',
                   onPressed: () {
                     Navigator.pop(context);
                     ref.read(timerProvider.notifier).startTimer(const Duration(minutes: 45), title);
                   },
-                  child: const Text('45m'),
                 ),
               ],
+            ),
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: () {
+                Navigator.pop(context);
+                _showCustomTimerDialog(context, ref);
+              },
+              icon: const Icon(Icons.edit),
+              label: Text(language == 'en' ? 'Custom' : 'Özel'),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('İptal'),
+            child: Text(language == 'en' ? 'Cancel' : 'İptal'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showCustomTimerDialog(BuildContext context, WidgetRef ref) {
+    final language = ref.read(languageControllerProvider);
+    final hoursController = TextEditingController(text: '0');
+    final minutesController = TextEditingController(text: '25');
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(language == 'en' ? 'Custom Timer' : 'Özel Zamanlayıcı'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: hoursController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: language == 'en' ? 'Hours (0-23)' : 'Saat (0-23)',
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: minutesController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: language == 'en' ? 'Minutes (0-59)' : 'Dakika (0-59)',
+                border: const OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(language == 'en' ? 'Cancel' : 'İptal'),
+          ),
+          FilledButton(
+            onPressed: () {
+              final hours = int.tryParse(hoursController.text) ?? 0;
+              final minutes = int.tryParse(minutesController.text) ?? 0;
+              
+              if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+                if (hours == 0 && minutes == 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        language == 'en' 
+                            ? 'Please enter a valid duration'
+                            : 'Lütfen geçerli bir süre girin',
+                      ),
+                    ),
+                  );
+                  return;
+                }
+                
+                Navigator.pop(context);
+                final duration = Duration(hours: hours, minutes: minutes);
+                ref.read(timerProvider.notifier).startTimer(duration, title);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      language == 'en'
+                          ? 'Invalid time range'
+                          : 'Geçersiz zaman aralığı',
+                    ),
+                  ),
+                );
+              }
+            },
+            child: Text(language == 'en' ? 'Start' : 'Başlat'),
           ),
         ],
       ),
@@ -370,6 +474,31 @@ class _SnoozeButton extends StatelessWidget {
     );
   }
 }
+
+class _TimerButton extends StatelessWidget {
+  const _TimerButton({
+    required this.label,
+    required this.onPressed,
+  });
+
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+      onPressed: onPressed,
+      style: FilledButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      child: Text(label),
+    );
+  }
+}
+
+
+
 
 
 

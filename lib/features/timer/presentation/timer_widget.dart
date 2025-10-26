@@ -9,6 +9,7 @@ class TimerWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timer = ref.watch(timerProvider);
+    final language = ref.watch(languageControllerProvider);
     
     if (!timer.isRunning && timer.remainingTime == Duration.zero) {
       return _buildStartTimer(context, ref);
@@ -27,7 +28,9 @@ class TimerWidget extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    timer.taskTitle.isNotEmpty ? timer.taskTitle : 'Timer',
+                    timer.taskTitle.isNotEmpty 
+                        ? timer.taskTitle 
+                        : (language == 'en' ? 'Timer' : 'Zamanlayıcı'),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
@@ -65,18 +68,18 @@ class TimerWidget extends ConsumerWidget {
                   ElevatedButton.icon(
                     onPressed: () => ref.read(timerProvider.notifier).pauseTimer(),
                     icon: const Icon(Icons.pause),
-                    label: const Text('Pause'),
+                    label: Text(language == 'en' ? 'Pause' : 'Duraklat'),
                   )
                 else
                   ElevatedButton.icon(
                     onPressed: () => ref.read(timerProvider.notifier).resumeTimer(),
                     icon: const Icon(Icons.play_arrow),
-                    label: const Text('Resume'),
+                    label: Text(language == 'en' ? 'Resume' : 'Devam'),
                   ),
                 ElevatedButton.icon(
                   onPressed: () => ref.read(timerProvider.notifier).stopTimer(),
                   icon: const Icon(Icons.stop),
-                  label: const Text('Stop'),
+                  label: Text(language == 'en' ? 'Stop' : 'Durdur'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.error,
                     foregroundColor: Theme.of(context).colorScheme.onError,
@@ -88,7 +91,7 @@ class TimerWidget extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: Text(
-                  'Timer completed!',
+                  language == 'en' ? 'Timer completed!' : 'Zamanlayıcı tamamlandı!',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Theme.of(context).colorScheme.error,
                     fontWeight: FontWeight.bold,

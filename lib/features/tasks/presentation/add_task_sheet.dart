@@ -76,56 +76,58 @@ class _AddTaskSheetState extends State<AddTaskSheet> with SingleTickerProviderSt
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Handle bar with animation
+                    // Handle bar - tek çizgi yeterli
                     Center(
                       child: Container(
-                        width: 36,
+                        width: 40,
                         height: 4,
-                        margin: const EdgeInsets.only(bottom: 24),
+                        margin: const EdgeInsets.only(bottom: 20, top: 8),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.onSurfaceVariant.withOpacity(0.3),
+                          color: theme.colorScheme.onSurfaceVariant.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
                     ),
-                    // Title input with icon
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(12),
+                    // Title input - temiz ve modern
+                    TextField(
+                      autofocus: true,
+                      controller: _titleController,
+                      textInputAction: TextInputAction.done,
+                      decoration: InputDecoration(
+                        hintText: 'Görev başlığı giriniz...',
+                        hintStyle: TextStyle(
+                          color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.edit_note_rounded,
+                          color: theme.colorScheme.primary,
+                          size: 28,
+                        ),
+                        filled: true,
+                        fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.outline.withOpacity(0.1),
                           ),
-                          child: Icon(
-                            Icons.edit_note_rounded,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(
                             color: theme.colorScheme.primary,
-                            size: 24,
+                            width: 2,
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextField(
-                            autofocus: true,
-                            controller: _titleController,
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                              hintText: 'Görev başlığı giriniz...',
-                              hintStyle: TextStyle(
-                                color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
-                                fontSize: 16,
-                              ),
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              height: 1.4,
-                            ),
-                            onSubmitted: (_) => _onSave(),
-                          ),
-                        ),
-                      ],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      ),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                      onSubmitted: (_) => _onSave(),
                     ),
                     const SizedBox(height: 24),
                     // Date/Time section with enhanced design

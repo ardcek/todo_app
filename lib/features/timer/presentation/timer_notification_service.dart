@@ -6,13 +6,18 @@ class TimerNotificationService {
   bool _initialized = false;
 
   Future<void> initialize() async {
-    if (_initialized) return;
+    try {
+      if (_initialized) return;
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const initSettings = InitializationSettings(android: androidSettings);
-    
-    await _notifications.initialize(initSettings);
-    _initialized = true;
+      const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const initSettings = InitializationSettings(android: androidSettings);
+      
+      await _notifications.initialize(initSettings);
+      _initialized = true;
+    } catch (e) {
+      // Notification service not available on this platform (e.g., Windows)
+      _initialized = false;
+    }
   }
 
   Future<void> showTimerNotification({
@@ -21,9 +26,11 @@ class TimerNotificationService {
     required bool isRunning,
     required double progress,
   }) async {
-    if (!_initialized) await initialize();
+    try {
+      if (!_initialized) await initialize();
+      if (!_initialized) return; // Still not initialized, skip
 
-    final androidDetails = AndroidNotificationDetails(
+      final androidDetails = AndroidNotificationDetails(
       'timer_channel',
       'Timer',
       channelDescription: 'Timer notifications',
@@ -45,10 +52,15 @@ class TimerNotificationService {
       '$title - Kalan: $remainingTime',
       details,
     );
+    } catch (e) {
+      // Notification failed, but timer continues working
+    }
   }
 
   Future<void> showTimerCompleteNotification(String title) async {
-    if (!_initialized) await initialize();
+    try {
+      if (!_initialized) await initialize();
+      if (!_initialized) return;
 
     const androidDetails = AndroidNotificationDetails(
       'timer_complete_channel',
@@ -69,10 +81,17 @@ class TimerNotificationService {
       title,
       details,
     );
+    } catch (e) {
+      // Notification failed, but timer completed
+    }
   }
 
   Future<void> cancelTimerNotification() async {
-    await _notifications.cancel(1);
+    try {
+      await _notifications.cancel(1);
+    } catch (e) {
+      // Notification cancellation failed, ignore
+    }
   }
 }
 

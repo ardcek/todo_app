@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/features/tasks/presentation/widgets/task_card.dart';
+import 'package:todo_app/features/tasks/presentation/widgets/task_stats_widget.dart';
 import 'package:todo_app/features/tasks/presentation/today_page.dart' as today;
 import 'package:todo_app/core/config/language_controller.dart';
 import 'package:todo_app/features/tasks/presentation/edit_task_dialog.dart';
@@ -25,6 +26,11 @@ class UpcomingPage extends ConsumerWidget {
     final allTasks = ref.watch(today.todayTasksProvider);
     final tasks = ref.read(today.todayTasksProvider.notifier).upcomingTasks;
     final language = ref.watch(languageControllerProvider);
+    
+    // Calculate stats
+    final completedCount = tasks.where((t) => t.completed).length;
+    final remainingCount = tasks.where((t) => !t.completed).length;
+    final progress = tasks.isEmpty ? 0.0 : completedCount / tasks.length;
     
     if (tasks.isEmpty) {
       return Center(
@@ -56,11 +62,19 @@ class UpcomingPage extends ConsumerWidget {
       );
     }
 
-    return ListView.separated(
-      padding: const EdgeInsets.only(bottom: 96),
-      itemCount: tasks.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 0),
-      itemBuilder: (context, index) {
+    return Column(
+      children: [
+        TaskStatsWidget(
+          completed: completedCount,
+          remaining: remainingCount,
+          progress: progress,
+        ),
+        Expanded(
+          child: ListView.separated(
+            padding: const EdgeInsets.only(bottom: 96),
+            itemCount: tasks.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 0),
+            itemBuilder: (context, index) {
         final t = tasks[index];
         final actualIndex = allTasks.indexOf(t);
         return RepaintBoundary(
@@ -123,6 +137,9 @@ class UpcomingPage extends ConsumerWidget {
           ),
         );
       },
+    ),
+        ),
+      ],
     );
   }
 }
