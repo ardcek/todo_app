@@ -20,20 +20,26 @@ A powerful and intuitive task management application built with Flutter, featuri
 - 🏷️ Auto-naming for unnamed projects ("Adsız Proje X" / "Unnamed Project X")
 
 ### Focus Timer
-- ⏱️ Pomodoro-style focus timer
-- ⚡ Quick presets (15m, 25m, 45m, 1h)
-- ⚙️ Custom duration support
-- � System notifications with progress bar
-- 🔊 Alarm sound when timer completes
-- � Background timer with live updates
+- ⏱️ **Pomodoro-style Focus Timer** for productivity
+- ⚡ **Quick Presets**: 15m, 25m, 45m for instant start
+- ⚙️ **Custom Duration**: Set hours (0-23) and minutes (0-59)
+- 📱 **System Notifications** with live progress bar (Android)
+- 🔊 **Alarm Sound** when timer completes
+- 🎯 **Background Timer** with real-time updates
+- 🖥️ **Cross-Platform**: Works on all platforms with graceful fallbacks
+- 🌍 **Fully Localized** timer controls and notifications
 
 ### UI/UX
-- 🎨 Modern Material Design 3
-- 🌓 Dark and Light theme support with instant transitions
-- 🌍 Full localization (English and Turkish)
-- 📱 Responsive design optimized for mobile
-- ✨ Smooth animations and performance optimizations
-- 🎯 Intuitive gesture controls
+- 🎨 **Premium Material Design 3** with custom animated components
+- 🌓 **Instant Theme Switching** between Dark and Light modes
+- 🌍 **Complete Localization** (English and Turkish)
+- 📱 **Responsive Design** optimized for mobile and desktop
+- ✨ **Smooth Animations** with 200ms transitions
+- 🎯 **Intuitive Gesture Controls** and modern interactions
+- 📊 **Live Statistics** showing task progress and completion rates
+- 🔄 **Priority-Based Sorting** for better task organization
+- 💎 **Premium Dialogs** with animated priority chips and modern inputs
+- 🖥️ **Cross-Platform** support (Android, iOS, Windows, macOS, Linux)
 
 ## Screenshots
 
@@ -101,6 +107,17 @@ lib/
 ```
 
 ## 📝 Version History
+
+- **v2.1** - Premium UI & Performance Update (October 2025)
+  - 🎨 **Premium Edit Task Dialog**: Complete redesign with animated priority chips, modern input fields, and card-style pickers
+  - ✨ **Add Task Sheet Enhancement**: Simplified title input with clean Material Design components
+  - 📊 **Task Statistics Widget**: Real-time completed/remaining/progress indicators on Today & Upcoming pages
+  - 🎯 **Priority Sorting**: Automatic task sorting (High → Medium → Low priority)
+  - ⚡ **Theme Switching Optimization**: Instant UI updates with background storage
+  - 🖥️ **Windows Compatibility**: Graceful notification fallback for Windows platform
+  - ⏱️ **Custom Timer Improvements**: Enhanced dialog with hours (0-23) and minutes (0-59) validation
+  - 🌍 **Complete Turkish Translation**: Fixed all remaining untranslated strings
+  - 🐛 **Bug Fixes**: Resolved Focus Timer duplication issue in Projects page
 
 - **v2.0** - Major Feature Update (October 2025)
   - ✨ Projects system with task management
