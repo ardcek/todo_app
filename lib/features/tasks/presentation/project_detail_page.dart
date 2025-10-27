@@ -277,11 +277,13 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage> {
                       final task = _project.tasks[index];
                       return RepaintBoundary(
                         child: TaskCard(
+                          taskId: task.id,
                           title: task.title,
                           priority: Priority.values[task.priorityIdx],
                           dueLabel: task.dueLabel,
                           completed: task.completed,
                           currentDueDate: task.dueDate,
+                          notes: task.notes,
                           onToggle: (value) {
                             setState(() {
                               task.completed = value ?? false;
@@ -292,20 +294,24 @@ class _ProjectDetailPageState extends ConsumerState<ProjectDetailPage> {
                             final result = await showDialog<Map<String, dynamic>>(
                               context: context,
                               builder: (context) => EditTaskDialog(
+                                taskId: task.id,
                                 initialTitle: task.title,
                                 initialPriority: Priority.values[task.priorityIdx],
                                 initialDueDate: task.dueDate,
+                                initialNotes: task.notes,
                               ),
                             );
                             if (result != null) {
                               setState(() {
                                 task.title = result['title'] as String;
-                                task.priorityIdx = result['priorityIdx'] as int;
+                                task.priorityIdx = result['priority'] as int;
                                 final dueDate = result['dueDate'] as DateTime?;
+                                final notes = result['notes'] as String?;
                                 task.dueDate = dueDate;
                                 task.dueLabel = dueDate != null 
                                     ? _formatDateTime(dueDate) 
                                     : null;
+                                task.notes = notes;
                               });
                               ref.read(projectsProvider.notifier).updateProject(_project);
                             }

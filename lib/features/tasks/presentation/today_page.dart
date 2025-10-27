@@ -7,22 +7,30 @@ import 'package:todo_app/features/tasks/presentation/edit_task_dialog.dart';
 
 class DemoTask {
   DemoTask({
+    this.id = 0,
     required this.title,
     required this.priorityIdx,
     this.dueLabel,
     this.dueDate,
+    this.notes,
   });
+  int id;
   String title;
   int priorityIdx;
   String? dueLabel;
   DateTime? dueDate;
+  String? notes;
   bool completed = false;
 }
 
 class TodayTasksNotifier extends StateNotifier<List<DemoTask>> {
   TodayTasksNotifier() : super([]);
+  int _nextId = 1;
 
-  void add(DemoTask task) => state = [task, ...state];
+  void add(DemoTask task) {
+    task.id = _nextId++;
+    state = [task, ...state];
+  }
   void removeAt(int index) => state = [...state]..removeAt(index);
   void toggle(int index, bool value) {
     final copy = [...state];
@@ -145,25 +153,30 @@ class TodayPage extends ConsumerWidget {
           final actualIndex = allTasks.indexOf(t);
           return RepaintBoundary(
             child: TaskCard(
+              taskId: t.id,
               title: t.title,
               priority: Priority.values[t.priorityIdx],
               dueLabel: t.dueLabel,
               completed: t.completed,
               currentDueDate: t.dueDate,
+              notes: t.notes,
               onToggle: (v) => ref.read(todayTasksProvider.notifier).toggle(actualIndex, v ?? false),
               onTap: () async {
                 final result = await showDialog<Map<String, dynamic>>(
                   context: context,
                   builder: (context) => EditTaskDialog(
+                    taskId: t.id,
                     initialTitle: t.title,
                     initialPriority: Priority.values[t.priorityIdx],
                     initialDueDate: t.dueDate,
+                    initialNotes: t.notes,
                   ),
                 );
                 if (result != null) {
                   final title = result['title'] as String;
                   final priority = result['priority'] as int;
                   final dueDate = result['dueDate'] as DateTime?;
+                  final notes = result['notes'] as String?;
                   
                   if (title.isNotEmpty) {
                     t.title = title;
@@ -171,6 +184,7 @@ class TodayPage extends ConsumerWidget {
                   t.priorityIdx = priority;
                   t.dueDate = dueDate;
                   t.dueLabel = dueDate != null ? _formatDateTime(dueDate) : null;
+                  t.notes = notes;
                   
                   ref.read(todayTasksProvider.notifier).updateTask(
                     actualIndex,

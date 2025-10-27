@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/features/timer/presentation/timer_controller.dart';
 import 'package:todo_app/core/config/language_controller.dart';
+import 'package:todo_app/features/tasks/presentation/subtask_provider.dart';
 
 enum Priority { low, medium, high }
 
 class TaskCard extends ConsumerWidget {
   const TaskCard({
     super.key,
+    required this.taskId,
     required this.title,
     required this.priority,
     required this.dueLabel,
@@ -17,8 +19,10 @@ class TaskCard extends ConsumerWidget {
     required this.onDelete,
     this.onSnooze,
     this.currentDueDate,
+    this.notes,
   });
 
+  final int taskId;
   final String title;
   final Priority priority;
   final String? dueLabel;
@@ -28,6 +32,7 @@ class TaskCard extends ConsumerWidget {
   final VoidCallback onDelete;
   final Function(DateTime)? onSnooze;
   final DateTime? currentDueDate;
+  final String? notes;
 
   Color _priorityBorder(ColorScheme scheme) {
     switch (priority) {
@@ -50,6 +55,7 @@ class TaskCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
     final language = ref.watch(languageControllerProvider);
+    final subtaskProgress = ref.watch(subtaskProgressProvider(taskId));
 
     return Dismissible(
       key: ValueKey('$title-$priority-$dueLabel'),
@@ -123,7 +129,75 @@ class TaskCard extends ConsumerWidget {
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             side: BorderSide(color: _priorityBorder(scheme)),
                           ),
+                          if (notes != null && notes!.isNotEmpty)
+                            Chip(
+                              avatar: Icon(
+                                Icons.notes_rounded,
+                                size: 16,
+                                color: scheme.tertiary,
+                              ),
+                              label: Text(
+                                language == 'en' ? 'Note' : 'Not',
+                                style: TextStyle(color: scheme.tertiary),
+                              ),
+                              visualDensity: VisualDensity.compact,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              side: BorderSide(color: scheme.tertiary.withOpacity(0.5)),
+                              backgroundColor: scheme.tertiaryContainer.withOpacity(0.3),
+                            ),
                         ],
+                      ),
+                      // Subtask Progress
+                      subtaskProgress.when(
+                        data: (progress) {
+                          if (progress.total == 0) return const SizedBox.shrink();
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.checklist_rounded,
+                                  size: 14,
+                                  color: scheme.primary.withOpacity(0.7),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${progress.completed}/${progress.total}',
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: scheme.primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child: LinearProgressIndicator(
+                                      value: progress.percentage / 100,
+                                      minHeight: 6,
+                                      backgroundColor: scheme.surfaceVariant,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        progress.percentage == 100
+                                            ? Colors.green
+                                            : scheme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '${progress.percentage.toStringAsFixed(0)}%',
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: scheme.onSurfaceVariant,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        loading: () => const SizedBox.shrink(),
+                        error: (_, __) => const SizedBox.shrink(),
                       ),
                     ],
                   ),

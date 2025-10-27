@@ -79,25 +79,30 @@ class UpcomingPage extends ConsumerWidget {
         final actualIndex = allTasks.indexOf(t);
         return RepaintBoundary(
           child: TaskCard(
+            taskId: t.id,
             title: t.title,
             priority: Priority.values[t.priorityIdx],
             dueLabel: t.dueLabel,
             completed: t.completed,
             currentDueDate: t.dueDate,
+            notes: t.notes,
             onToggle: (v) => ref.read(today.todayTasksProvider.notifier).toggle(actualIndex, v ?? false),
             onTap: () async {
               final result = await showDialog<Map<String, dynamic>>(
                 context: context,
                 builder: (context) => EditTaskDialog(
+                  taskId: t.id,
                   initialTitle: t.title,
                   initialPriority: Priority.values[t.priorityIdx],
                   initialDueDate: t.dueDate,
+                  initialNotes: t.notes,
                 ),
               );
               if (result != null) {
                 final title = result['title'] as String;
                 final priority = result['priority'] as int;
                 final dueDate = result['dueDate'] as DateTime?;
+                final notes = result['notes'] as String?;
                 
                 if (title.isNotEmpty) {
                   t.title = title;
@@ -105,6 +110,7 @@ class UpcomingPage extends ConsumerWidget {
                 t.priorityIdx = priority;
                 t.dueDate = dueDate;
                 t.dueLabel = dueDate != null ? _formatDateTime(dueDate) : null;
+                t.notes = notes;
                 
                 ref.read(today.todayTasksProvider.notifier).updateTask(
                   actualIndex,

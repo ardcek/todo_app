@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/features/tasks/presentation/widgets/task_card.dart';
 import 'package:todo_app/core/config/language_controller.dart';
+import 'package:todo_app/features/tasks/presentation/widgets/subtask_list_widget.dart';
 
 class EditTaskDialog extends ConsumerStatefulWidget {
   const EditTaskDialog({
     super.key,
+    required this.taskId,
     required this.initialTitle,
     required this.initialPriority,
     this.initialDueDate,
+    this.initialNotes,
   });
 
+  final int taskId;
   final String initialTitle;
   final Priority initialPriority;
   final DateTime? initialDueDate;
+  final String? initialNotes;
 
   @override
   ConsumerState<EditTaskDialog> createState() => _EditTaskDialogState();
@@ -21,6 +26,7 @@ class EditTaskDialog extends ConsumerStatefulWidget {
 
 class _EditTaskDialogState extends ConsumerState<EditTaskDialog> {
   late TextEditingController _titleController;
+  late TextEditingController _notesController;
   late int _priorityIdx;
   DateTime? _dueDate;
 
@@ -28,6 +34,7 @@ class _EditTaskDialogState extends ConsumerState<EditTaskDialog> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.initialTitle);
+    _notesController = TextEditingController(text: widget.initialNotes ?? '');
     _priorityIdx = widget.initialPriority.index;
     _dueDate = widget.initialDueDate;
   }
@@ -35,6 +42,7 @@ class _EditTaskDialogState extends ConsumerState<EditTaskDialog> {
   @override
   void dispose() {
     _titleController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -219,6 +227,57 @@ class _EditTaskDialogState extends ConsumerState<EditTaskDialog> {
                 ),
               ),
             ),
+
+            const SizedBox(height: 20),
+
+            // Notes Section
+            Row(
+              children: [
+                Icon(
+                  Icons.notes_rounded,
+                  size: 20,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  language == 'en' ? 'Notes' : 'Notlar',
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: theme.colorScheme.outline.withOpacity(0.2),
+                ),
+              ),
+              child: TextField(
+                controller: _notesController,
+                maxLines: 5,
+                decoration: InputDecoration(
+                  hintText: language == 'en' 
+                      ? 'Add notes, links, or details...'
+                      : 'Not, bağlantı veya detaylar ekleyin...',
+                  hintStyle: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(16),
+                ),
+                style: theme.textTheme.bodyMedium,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Subtasks Section
+            SubtaskListWidget(taskId: widget.taskId),
           ],
         ),
       ),
@@ -248,6 +307,7 @@ class _EditTaskDialogState extends ConsumerState<EditTaskDialog> {
               'title': _titleController.text.trim(),
               'priority': _priorityIdx,
               'dueDate': _dueDate,
+              'notes': _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
             });
           },
           style: FilledButton.styleFrom(

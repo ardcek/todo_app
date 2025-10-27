@@ -37,7 +37,17 @@ class TaskTags extends Table {
   Set<Column> get primaryKey => {taskId, tagId};
 }
 
-@DriftDatabase(tables: [Tasks, Tags, TaskTags])
+class Subtasks extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get taskId => integer().references(Tasks, #id, onDelete: KeyAction.cascade)();
+  TextColumn get title => text()();
+  BoolColumn get completed => boolean().withDefault(const Constant(false))();
+  IntColumn get orderIndex => integer()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+}
+
+@DriftDatabase(tables: [Tasks, Tags, TaskTags, Subtasks])
 class AppDatabase extends _$AppDatabase {
   static AppDatabase? _instance;
   static Future<AppDatabase> _initialization = _initialize();
@@ -62,7 +72,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
@@ -71,7 +81,10 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        // Add migration logic here when schema changes
+        if (from == 1) {
+          // Add Subtasks table in version 2
+          await m.createTable(subtasks);
+        }
       },
     );
   }
